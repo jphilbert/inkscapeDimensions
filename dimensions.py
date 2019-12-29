@@ -92,9 +92,10 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         self.OptionParser.add_option("--tab", action="store", type="string", dest="tab", default="object")
 
         self.OptionParser.add_option("--LINdirection", action="store", type="string", dest="LINdirection", default='none')
+        self.OptionParser.add_option("--LINside", action="store", type="string", dest="LINside", default='none')
         self.OptionParser.add_option("--LINcontentsType", action="store", type="string", dest="LINcontentsType", default='none')
-        self.OptionParser.add_option("--LINinvertSide", action="store", type="inkbool", dest="LINinvertSide", default=False)
-        self.OptionParser.add_option("--LINinvertTextSide", action="store", type="inkbool", dest="LINinvertTextSide", default=False)
+        # self.OptionParser.add_option("--LINinvertSide", action="store", type="inkbool", dest="LINinvertSide", default=False)
+        # self.OptionParser.add_option("--LINinvertTextSide", action="store", type="inkbool", dest="LINinvertTextSide", default=False)
         self.OptionParser.add_option("--LINhorizontalText", action="store", type="inkbool", dest="LINhorizontalText", default=False)
         self.OptionParser.add_option("--LINsmalDimStyle", action="store", type="inkbool", dest="LINsmalDimStyle", default=False)
 
@@ -255,10 +256,16 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                     continue
 
                 self.drawLinDim(root_layer, [P1, P2], direction=so.LINdirection, label='Dim',
-                                invertSide=so.LINinvertSide, textType=so.LINcontentsType,
-                                customText=so.LINcustomContent, unit=so.LINunit, unitSymbol=so.LINunitSymbol,
-                                scale=so.LINscaleDim, precision=so.LINprecision, horizontalText=so.LINhorizontalText,
-                                invertTextSide=so.LINinvertTextSide, smallDimension=so.LINsmalDimStyle)
+                                textType=so.LINcontentsType,
+                                customText=so.LINcustomContent,
+                                unit=so.LINunit, unitSymbol=so.LINunitSymbol,
+                                scale=so.LINscaleDim, precision=so.LINprecision,
+                                horizontalText=so.LINhorizontalText,
+                                # invertSide=so.LINinvertSide,
+                                # invertTextSide=so.LINinvertTextSide,
+                                invertSide=so.LINside == 'lowerRight',
+                                invertTextSide=so.LINside == 'lowerRight',
+                                smallDimension=so.LINsmalDimStyle)
                 if so.removeAuxLine:
                     self.removeElement(element)
 
@@ -617,7 +624,7 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         parent: parent object
         points: list of points [P1,P2]
-        direction: dimension direction. values: 'vertical','horizontal','parallel'
+        direction: dimension direction. values: 'vertical','horizontal','parallel','auto'
         label: label of the object (it can be repeated)
         invertSide: invert side of the dimmension annotation.
                     False (default): above(horiz./paral.),left (vert.)
@@ -643,6 +650,27 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         maxY = max(P1[1], P2[1])
         minY = min(P1[1], P2[1])
 
+        segment_angle = abs(self.getSegmentFromPoints(points)[1] * 180.0 / math.pi)
+
+        if direction == 'auto':
+            parallel_threshold = 15
+            if abs(segment_angle - 90) < parallel_threshold:
+                direction = 'vertical'
+            elif segment_angle < parallel_threshold or segment_angle > (180 - parallel_threshold):
+                direction = 'horizontal'
+            else:
+                direction = 'parallel'
+
+        if direction == 'horizontal' and segment_angle > (180 - parallel_threshold):
+            invertSide = not invertSide
+            invertTextSide = not invertTextSide
+
+        if direction == 'vertical' and segment_angle < (90 - parallel_threshold):
+            invertSide = not invertSide
+            invertTextSide = not invertTextSide
+            
+        inkex.errormsg('angle: ' + str(segment_angle))
+        
         # tangent vector: from P1 to P2
         t_vector = P2 - P1
         if direction == 'horizontal':

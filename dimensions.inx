@@ -10,12 +10,20 @@
         <page name="Linear" appearance="minimal" _gui-text="Linear">
           
           <param name="LINdirection" type="optiongroup" appearance="minimal" _gui-text="Direction:">
-              <_option value="horizontal">Horizontal</_option>
-              <_option value="vertical">Vertical</_option>
-              <_option value="parallel">Parallel</_option>
+            <_option value="auto">Auto</_option>
+            <_option value="horizontal">Horizontal</_option>
+            <_option value="vertical">Vertical</_option>
+            <_option value="parallel">Parallel</_option>
           </param>
-          <param name="LINinvertSide"      type="boolean" _gui-text="Invert side">False</param>
-          <param name="LINinvertTextSide"      type="boolean" _gui-text="Invert text side">False</param>
+
+          <param name="LINside" type="optiongroup" appearance="minimal"
+			  _gui-text="Text Side:">
+            <_option value="upperLeft">Upper Left</_option>
+            <_option value="lowerRight">Lower Right</_option>
+          </param>
+		
+          <!-- <param name="LINinvertSide"      type="boolean" _gui-text="Invert side">False</param> -->
+          <!-- <param name="LINinvertTextSide"      type="boolean" _gui-text="Invert text side">False</param> -->
           <param name="LINhorizontalText"      type="boolean" _gui-text="Keep text horizontal">False</param>
           <param name="LINsmalDimStyle"      type="boolean" _gui-text="Small dimension style">False</param>
           
@@ -26,7 +34,7 @@
           </param>
 
           <param name="LINunit" type="optiongroup" appearance="minimal" _gui-text="Unit:">
-              <_option value="doc">document units</_option>
+              <_option value="doc">(document units)</_option>
               <_option value="mm">mm</_option>
               <_option value="cm">cm</_option>
               <_option value="m">m</_option>
@@ -48,7 +56,7 @@
           <param name="ANGannotationDistance"  type="int" min="0" max="100" _gui-text="Annotation distance in % (only if 'Position>Interior')">50</param>
           <param name="ANGmarkCenter"      type="boolean" _gui-text="Add center mark">False</param>
           <param name="ANGinvertAngle"      type="boolean" _gui-text="Explementary angle">False</param>
-          <param name="ANGinvertTextSide"      type="boolean" _gui-text="Invert text side">False</param>
+          <param name="ANGinvertTextSide"      type="boolean" _gui-text="Text inside">False</param>
           <param name="ANGhorizontalText"      type="boolean" _gui-text="Keep text horizontal">False</param>
           <param name="ANGsmalDimStyle"      type="boolean" _gui-text="Small dimension style">False</param>
           
