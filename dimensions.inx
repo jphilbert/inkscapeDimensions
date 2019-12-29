@@ -26,7 +26,7 @@
           </param>
 
           <param name="LINunit" type="optiongroup" appearance="minimal" _gui-text="Unit:">
-              <_option value="doc">doc</_option>
+              <_option value="doc">document units</_option>
               <_option value="mm">mm</_option>
               <_option value="cm">cm</_option>
               <_option value="m">m</_option>
@@ -83,7 +83,8 @@ Tip: Use \\ to break lines
               <_option value="serif">Serif</_option>
           </param>
           <param name="desc1" type="description" appearance="header">Dimensions</param>
-          <param name="fontSize" type="float" min="1"    max="50" precision="1"   _gui-text="Font size  (default: 2.5)">10</param>
+          <param name="fontSize" type="float" min="0.001"    max="50"
+			  precision="3"   _gui-text="Font size in document units">1.000</param>
           <param name="useDefaultProp"    type="boolean" _gui-text="Default proportions (ignore next options)">True</param>
           
           <param name="lineWidthProp" type="float" min="0.1"    max="10" precision="1"   _gui-text="Line width proportion (default: 1.0)">1.0</param>

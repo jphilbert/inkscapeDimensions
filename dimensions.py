@@ -7,6 +7,9 @@ import inkscapeMadeEasy_Base as inkBase
 import inkscapeMadeEasy_Draw as inkDraw
 import numpy as np
 
+import inkex
+import gettext
+_ = gettext.gettext
 
 class lineSegment(inkBase.inkscapeMadeEasy):
     def __init__(self, Pstart, Pend, normalDirection='R'):
@@ -144,6 +147,19 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         self.documentUnit = self.getDocumentUnit()
 
+        try:
+            elem = self.getElemFromXpath('/svg:svg')
+            width = self.getElemAtrib(elem, 'width')
+            width = width.replace(self.documentUnit, '')
+            width = float(width)
+            elem = self.getElemFromXpath('/svg:svg')
+            view_width = self.getElemAtrib(elem, 'viewBox')
+            view_width = str.split(view_width, ' ')[2]
+            view_width = float(view_width)
+            self.documentScale = view_width / width
+        except:
+            self.documentScale = 1
+
         # root_layer = self.current_layer
         # root_layer = self.document.getroot()
         root_layer = self.getcurrentLayer()
@@ -159,7 +175,7 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             self.useLatex = so.useLatex
             inkDraw.useLatex = so.useLatex
 
-        self.fontSize = so.fontSize
+        self.fontSize = so.fontSize * self.documentScale
 
         if not so.useLatex:
             self.textStyle = inkDraw.textStyle.setSimpleColor(self.fontSize / 0.75, justification='center',
@@ -656,7 +672,10 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         if textType == 'dimension':
             value = np.linalg.norm(n_vector)
 
-            value = self.userUnit2unit(value, unit)
+            # inkex.errormsg('Value: ' + str(value))
+            # inkex.errormsg('Scale: ' + str(self.documentScale))
+                
+            value = self.unit2unit(value, self.documentUnit, unit) / self.documentScale
 
             valueStr = '%.*f' % (precision, value * scale)
 
