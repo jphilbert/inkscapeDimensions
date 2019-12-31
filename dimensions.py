@@ -8,8 +8,10 @@ import inkscapeMadeEasy_Draw as inkDraw
 import numpy as np
 
 import inkex
-import gettext
-_ = gettext.gettext
+import simpletransform
+# import inkex.transforms
+# import gettext
+# _ = gettext.gettext
 
 class lineSegment(inkBase.inkscapeMadeEasy):
     def __init__(self, Pstart, Pend, normalDirection='R'):
@@ -93,7 +95,7 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         self.OptionParser.add_option("--LINdirection", action="store", type="string", dest="LINdirection", default='none')
         self.OptionParser.add_option("--LINside", action="store", type="string", dest="LINside", default='none')
-        self.OptionParser.add_option("--LINcontentsType", action="store", type="string", dest="LINcontentsType", default='none')
+        # self.OptionParser.add_option("--LINcontentsType", action="store", type="string", dest="LINcontentsType", default='none')
         # self.OptionParser.add_option("--LINinvertSide", action="store", type="inkbool", dest="LINinvertSide", default=False)
         # self.OptionParser.add_option("--LINinvertTextSide", action="store", type="inkbool", dest="LINinvertTextSide", default=False)
         self.OptionParser.add_option("--LINhorizontalText", action="store", type="inkbool", dest="LINhorizontalText", default=False)
@@ -103,7 +105,7 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         self.OptionParser.add_option("--LINunitSymbol", action="store", type="inkbool", dest="LINunitSymbol", default=False)
         self.OptionParser.add_option("--LINscaleDim", action="store", type="float", dest="LINscaleDim", default=1.0)
         self.OptionParser.add_option("--LINprecision", action="store", type="int", dest="LINprecision", default=2)
-        self.OptionParser.add_option("--LINcustomContent", action="store", type="string", dest="LINcustomContent", default='none')
+        self.OptionParser.add_option("--LINcustomContent", action="store", type="string", dest="LINcustomContent", default='')
 
         self.OptionParser.add_option("--ANGdimPosition", action="store", type="string", dest="ANGdimPosition", default='center')
         self.OptionParser.add_option("--ANGannotationDistance", action="store", type="int", dest="ANGannotationDistance", default=50)
@@ -207,64 +209,81 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         scaleMarker = 'scale (' + str(1.0 / self.lineWidth) + ')'
 
         translateMarker = 'translate (%s,0)' % self.arrowSize
-        markerPath = 'M 0.0,0.0 L %f,%f L %f,%f L 0.0,0.0 z ' % (-self.arrowSize,
-                                                                 self.arrowSize * math.tan(10 * math.pi / 180.0),
-                                                                 -self.arrowSize,
-                                                                 -self.arrowSize * math.tan(10 * math.pi / 180.0))
+        markerPath = 'M 0.0,0.0 L %f,%f L %f,%f L 0.0,0.0 z ' % (
+            -self.arrowSize,
+            self.arrowSize * math.tan(10 * math.pi / 180.0),
+            -self.arrowSize,
+            -self.arrowSize * math.tan(10 * math.pi / 180.0))
 
-        arrowStart = inkDraw.marker.createMarker(self, 'DimmArrow_Start', markerPath, renameMode, strokeColor=None,
-                                                 fillColor=self.lineColor,
-                                                 markerTransform=scaleMarker + 'rotate(180)' + translateMarker)
-        arrowEnd = inkDraw.marker.createMarker(self, 'DimmArrow_End', markerPath, renameMode, strokeColor=None,
-                                               fillColor=self.lineColor, markerTransform=scaleMarker + translateMarker)
+        arrowStart = inkDraw.marker.createMarker(
+            self, 'DimmArrow_Start', markerPath, renameMode, strokeColor=None,
+            fillColor=self.lineColor,
+            markerTransform=scaleMarker + 'rotate(180)' + translateMarker)
+        arrowEnd = inkDraw.marker.createMarker(
+            self, 'DimmArrow_End', markerPath, renameMode, strokeColor=None,
+            fillColor=self.lineColor, markerTransform=scaleMarker + translateMarker)
 
         if so.markerStyle == 'arrow':
-            self.LINdimensionLineStyle = inkDraw.lineStyle.set(lineWidth=self.lineWidth, lineColor=self.lineColor,
-                                                               markerStart=arrowStart, markerEnd=arrowEnd)
+            self.LINdimensionLineStyle = inkDraw.lineStyle.set(
+                lineWidth=self.lineWidth, lineColor=self.lineColor,
+                markerStart=arrowStart, markerEnd=arrowEnd)
 
         if so.markerStyle == 'circle':
-            marker = inkDraw.marker.createDotMarker(self, 'DimmCircle', renameMode,
-                                                    scale=0.05 / self.lineWidth * self.arrowSize, strokeColor=None,
-                                                    fillColor=self.lineColor)
-            self.LINdimensionLineStyle = inkDraw.lineStyle.set(lineWidth=self.lineWidth, lineColor=self.lineColor,
-                                                               markerStart=marker, markerEnd=marker)
+            marker = inkDraw.marker.createDotMarker(
+                self, 'DimmCircle', renameMode,
+                scale=0.05 / self.lineWidth * self.arrowSize, strokeColor=None,
+                fillColor=self.lineColor)
+            self.LINdimensionLineStyle = inkDraw.lineStyle.set(
+                lineWidth=self.lineWidth, lineColor=self.lineColor,
+                markerStart=marker, markerEnd=marker)
 
         if so.markerStyle == 'serif':
             markerPath = 'M -%f,%f L %f,-%f' % (
-            0.5 * self.arrowSize, 0.5 * self.arrowSize, 0.5 * self.arrowSize, 0.5 * self.arrowSize)
-            marker = inkDraw.marker.createMarker(self, 'DimmSerif', markerPath, renameMode, strokeColor=self.lineColor,
-                                                 lineWidth=self.lineWidth * 2, markerTransform=scaleMarker)
-            self.LINdimensionLineStyle = inkDraw.lineStyle.set(lineWidth=self.lineWidth, lineColor=self.lineColor,
-                                                               markerStart=marker, markerEnd=marker)
+                0.5 * self.arrowSize, 0.5 * self.arrowSize, 0.5 * self.arrowSize, 0.5 * self.arrowSize)
+            marker = inkDraw.marker.createMarker(
+                self, 'DimmSerif', markerPath, renameMode, strokeColor=self.lineColor,
+                lineWidth=self.lineWidth * 2, markerTransform=scaleMarker)
+            self.LINdimensionLineStyle = inkDraw.lineStyle.set(
+                lineWidth=self.lineWidth, lineColor=self.lineColor,
+                markerStart=marker, markerEnd=marker)
 
-        self.ANGdimensionLineStyle = inkDraw.lineStyle.set(lineWidth=self.lineWidth, lineColor=self.lineColor,
-                                                           markerStart=arrowStart, markerEnd=arrowEnd)
+        self.ANGdimensionLineStyle = inkDraw.lineStyle.set(
+            lineWidth=self.lineWidth, lineColor=self.lineColor,
+            markerStart=arrowStart, markerEnd=arrowEnd)
 
         # used with smalldimension
-        self.ANGdimensionLineStyleSmall = inkDraw.lineStyle.set(lineWidth=self.lineWidth, lineColor=self.lineColor,
-                                                                markerEnd=arrowEnd)
-        self.ANGdimensionLineStyleSmall2 = inkDraw.lineStyle.set(lineWidth=self.lineWidth, lineColor=self.lineColor,
-                                                                 markerStart=arrowStart)
-        self.annotationLineStyle = inkDraw.lineStyle.set(lineWidth=self.lineWidth * so.anotationScale,
-                                                         lineColor=self.lineColor, markerStart=arrowStart)
+        self.ANGdimensionLineStyleSmall = inkDraw.lineStyle.set(
+            lineWidth=self.lineWidth, lineColor=self.lineColor, markerEnd=arrowEnd)
+        self.ANGdimensionLineStyleSmall2 = inkDraw.lineStyle.set(
+            lineWidth=self.lineWidth, lineColor=self.lineColor, markerStart=arrowStart)
+        self.annotationLineStyle = inkDraw.lineStyle.set(
+            lineWidth=self.lineWidth * so.anotationScale,
+            lineColor=self.lineColor, markerStart=arrowStart)
 
         if so.tab == 'Linear':
             # get points of selected object
             for id, element in self.selected.iteritems():
-                [P1, P2] = self.getPointsLinDim(element, so.LINdirection)
+                if element.tag == inkex.addNS('path', 'svg') or element.tag == 'path':
+                    [P1, P2] = self.getPointsLinDim(element, so.LINdirection)
+                # elif element.tag == inkex.addNS('rect', 'svg') or element.tag == 'rect':
+                #     self.displayMsg(str(simpletransform.computeBBox(element)))
+                #     continue
+                #     P1 = [float(self.getElemAtrib(element, 'x')), float(self.getElemAtrib(element, 'y'))]
+                #     P2 = [P1[0] + float(self.getElemAtrib(element, 'width')),
+                #           P1[1] + float(self.getElemAtrib(element, 'height'))]
+                else:
+                    continue
+                
+                # self.displayMsg(str(P1))
                 if not P1 or not P2:
                     continue
 
                 self.drawLinDim(root_layer, [P1, P2], direction=so.LINdirection, label='Dim',
-                                textType=so.LINcontentsType,
                                 customText=so.LINcustomContent,
                                 unit=so.LINunit, unitSymbol=so.LINunitSymbol,
                                 scale=so.LINscaleDim, precision=so.LINprecision,
                                 horizontalText=so.LINhorizontalText,
-                                # invertSide=so.LINinvertSide,
-                                # invertTextSide=so.LINinvertTextSide,
-                                invertSide=so.LINside == 'lowerRight',
-                                invertTextSide=so.LINside == 'lowerRight',
+                                textSide = so.LINside,
                                 smallDimension=so.LINsmalDimStyle)
                 if so.removeAuxLine:
                     self.removeElement(element)
@@ -617,8 +636,11 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             inkDraw.text.latex(self, group, valueStr, posDim, fontSize=self.fontSize, refPoint=justif,
                                textColor=self.textColor, LatexCommands=' ', angleDeg=angle)
 
-    def drawLinDim(self, parent, points, direction, label='Dim', invertSide=False, textType='dimension', customText='',
-                   unit=None, unitSymbol=False, scale=1.0, precision=2, horizontalText=False, invertTextSide=False,
+    def drawLinDim(self, parent, points, direction, label='Dim',
+                   textSide = 'lowerRight',
+                   customText='',
+                   unit=None, unitSymbol=False,
+                   scale=1.0, precision=2, horizontalText=False,
                    smallDimension=False):
         """ draws linear dimension
 
@@ -626,34 +648,41 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         points: list of points [P1,P2]
         direction: dimension direction. values: 'vertical','horizontal','parallel','auto'
         label: label of the object (it can be repeated)
-        invertSide: invert side of the dimmension annotation.
-                    False (default): above(horiz./paral.),left (vert.)
-                    True: below(horiz./paral.),right (vert.)
-        textType: type of text. values  'dimension' (default), 'custom'
-        customText: text to be added. Used only if textType='custom'
-        unit: dimmension unit. Used only if textType='dimension'. use None to ignore. Default: None
+        textSide: 'lowerRight' or 'upperLeft'
+        customText: text to be added. Will use dimension if None or ''
+        unit: dimension unit. Used only if textType='dimension'. use None to ignore. Default: None
         unitSymbol: add unit symbol to the text. Default: False
         scale: scale factor for the dimension. Used only if textType='dimension'. Default: 1.0
         precision: number of decimals. Used only if textType='dimension'
         horizontalText: places text horizontally despite dimension orientation. Default: False
-        invertTextSide: invert text placement.
-                        False (default): above line(horiz./paral.),left (vert.)
-                        True: below line (horiz./paral.),right (vert.)
-
+     
         """
 
+        # Order the points
         P1 = np.array(points[0])
         P2 = np.array(points[1])
-        maxX = max(P1[0], P2[0])
-        minX = min(P1[0], P2[0])
 
-        maxY = max(P1[1], P2[1])
-        minY = min(P1[1], P2[1])
+        if textSide == 'lowerRight':
+            textSide = -1
+            P1 = np.array(points[1])
+            P2 = np.array(points[0])
+        else:
+            textSide = 1
 
-        segment_angle = abs(self.getSegmentFromPoints(points)[1] * 180.0 / math.pi)
+        t_vector = P2 - P1
+        angle = math.atan2(t_vector[1], t_vector[0]) * 180.0 / math.pi
 
+        
+        if angle == 0 or angle == 180:
+            direction = 'horizontal'
+        if abs(angle) == 90:
+            direction = 'vertical'
+
+        # Figure out the direction if AUTO         
         if direction == 'auto':
-            parallel_threshold = 15
+            # threshold how close to 0 or 90 degrees to be for horizontal or vertical
+            parallel_threshold = 15 
+            segment_angle = abs(self.getSegmentFromPoints(points)[1] * 180.0 / math.pi)
             if abs(segment_angle - 90) < parallel_threshold:
                 direction = 'vertical'
             elif segment_angle < parallel_threshold or segment_angle > (180 - parallel_threshold):
@@ -661,50 +690,62 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             else:
                 direction = 'parallel'
 
-        if direction == 'horizontal' and segment_angle > (180 - parallel_threshold):
-            invertSide = not invertSide
-            invertTextSide = not invertTextSide
-
-        if direction == 'vertical' and segment_angle < (90 - parallel_threshold):
-            invertSide = not invertSide
-            invertTextSide = not invertTextSide
-            
-        inkex.errormsg('angle: ' + str(segment_angle))
         
-        # tangent vector: from P1 to P2
-        t_vector = P2 - P1
+        delta = [0, 0]
+        
+        if direction == 'parallel':
+            if angle >= 45:
+                P1 = np.array(points[1])
+                P2 = np.array(points[0])
+            if angle < 45-180:
+                P1 = np.array(points[0])
+                P2 = np.array(points[1])
+            t_vector = P2 - P1
+
         if direction == 'horizontal':
             t_vector = np.array([t_vector[0], 0])
-            DeltaY = abs(P2[1] - P1[1])
+            if abs(angle) >= 90:
+                textSide *= -1
+            delta = [0, abs(P2[1] - P1[1])]
+            
         if direction == 'vertical':
+            P1 = np.array(points[0])
+            P2 = np.array(points[1])
+            t_vector = P2 - P1
             t_vector = np.array([0, t_vector[1]])
-            DeltaX = abs(P2[0] - P1[0])
+            delta = abs(P2[0] - P1[0])
+
+            if abs(angle) <= 90:
+                delta = [0, delta]
+            else:
+                delta = [delta, 0]
+            textSide *= -1
 
         # normal vector: counter-clockwise with respect to tangent vector
         n_vector = np.array([t_vector[1], -t_vector[0]])
 
         # normalization
-        t_versor = t_vector / np.linalg.norm(t_vector)
-        n_versor = n_vector / np.linalg.norm(n_vector)
+        t_norm = np.linalg.norm(t_vector)
+        if t_norm == 0:
+            return None
+        
+        t_versor = t_vector / t_norm
+        n_versor = textSide * n_vector / np.linalg.norm(n_vector)
 
         # inkDraw.line.relCoords(parent, [(0.5 * n_vector).tolist()], offset=P1.tolist(),
         #                        lineStyle=inkDraw.lineStyle.setSimpleBlack(0.5))
         # inkDraw.line.relCoords(parent, [(0.5 * t_vector).tolist()], offset=P1.tolist(),
         #                        lineStyle=inkDraw.lineStyle.setSimpleBlack(0.5))
 
-        # text string
-
-        if unit == 'doc':
-            unit = self.documentUnit
-
-        if textType == 'dimension':
-            value = np.linalg.norm(n_vector)
-
-            # inkex.errormsg('Value: ' + str(value))
-            # inkex.errormsg('Scale: ' + str(self.documentScale))
+        
+        # Text String
+        valueStr = customText
+        if valueStr is None or len(valueStr.strip()) == 0:
+            if unit == 'doc':
+                unit = self.documentUnit
                 
+            value = np.linalg.norm(n_vector)                
             value = self.unit2unit(value, self.documentUnit, unit) / self.documentScale
-
             valueStr = '%.*f' % (precision, value * scale)
 
             if unitSymbol:
@@ -712,65 +753,28 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                     if self.useLatex:
                         valueStr = '\SI{%s}{%s}' % (valueStr, unit)
                     else:
-                        valueStr = valueStr + ' ' + unit
-        else:
-            valueStr = customText
+                        valueStr = valueStr + ' ' + unit            
 
+
+        ########################################
+        # Start Drawing 
+        ########################################
         group = self.createGroup(parent, label)
 
-        # auxiliary lines
-        if invertSide:
-            L1start = P1 - n_versor * self.auxLineOffset
-            L2start = P2 - n_versor * self.auxLineOffset
-        else:
-            L1start = P1 + n_versor * self.auxLineOffset
-            L2start = P2 + n_versor * self.auxLineOffset
+        # Draw Auxiliary Lines
+        L1start = P1 + n_versor * self.auxLineOffset
+        L2start = P2 + n_versor * self.auxLineOffset
+        
+        L1endRel = n_versor * (delta[0] + self.dimensionSpacing + self.auxLineExtension)
+        L2endRel = n_versor * (delta[1] + self.dimensionSpacing + self.auxLineExtension)
 
-        if direction == 'horizontal':
-            if invertSide:  # below
-                if P1[1] < P2[1]:
-                    L1endRel = -n_versor * (DeltaY + self.dimensionSpacing + self.auxLineExtension)
-                    L2endRel = -n_versor * (self.dimensionSpacing + self.auxLineExtension)
-                else:
-                    L1endRel = -n_versor * (self.dimensionSpacing + self.auxLineExtension)
-                    L2endRel = -n_versor * (DeltaY + self.dimensionSpacing + self.auxLineExtension)
+        inkDraw.line.relCoords(group, [L1endRel.tolist()], offset=L1start.tolist(),
+                               lineStyle=self.auxiliaryLineStyle)
+        inkDraw.line.relCoords(group, [L2endRel.tolist()], offset=L2start.tolist(),
+                               lineStyle=self.auxiliaryLineStyle)
 
-            else:  # above
-                if P1[1] < P2[1]:
-                    L1endRel = n_versor * (self.dimensionSpacing + self.auxLineExtension)
-                    L2endRel = n_versor * (DeltaY + self.dimensionSpacing + self.auxLineExtension)
-                else:
-                    L1endRel = n_versor * (DeltaY + self.dimensionSpacing + self.auxLineExtension)
-                    L2endRel = n_versor * (self.dimensionSpacing + self.auxLineExtension)
-
-        if direction == 'vertical':
-            if invertSide:  # to the right
-                if P1[0] < P2[0]:
-                    L1endRel = -n_versor * (DeltaX + self.dimensionSpacing + self.auxLineExtension)
-                    L2endRel = -n_versor * (self.dimensionSpacing + self.auxLineExtension)
-                else:
-                    L1endRel = -n_versor * (self.dimensionSpacing + self.auxLineExtension)
-                    L2endRel = -n_versor * (DeltaX + self.dimensionSpacing + self.auxLineExtension)
-
-            else:  # to the left
-                if P1[0] < P2[0]:
-                    L1endRel = n_versor * (self.dimensionSpacing + self.auxLineExtension)
-                    L2endRel = n_versor * (DeltaX + self.dimensionSpacing + self.auxLineExtension)
-                else:
-                    L1endRel = n_versor * (DeltaX + self.dimensionSpacing + self.auxLineExtension)
-                    L2endRel = n_versor * (self.dimensionSpacing + self.auxLineExtension)
-
-        if direction == 'parallel':
-            if invertSide:  # below
-                L1endRel = -n_versor * (self.dimensionSpacing + self.auxLineExtension)
-            else:  # above
-                L1endRel = n_versor * (self.dimensionSpacing + self.auxLineExtension)
-            L2endRel = L1endRel
-
-        inkDraw.line.relCoords(group, [L1endRel.tolist()], offset=L1start.tolist(), lineStyle=self.auxiliaryLineStyle)
-        inkDraw.line.relCoords(group, [L2endRel.tolist()], offset=L2start.tolist(), lineStyle=self.auxiliaryLineStyle)
-
-        # draw dimension line
+        
+        # Draw Dimension Line
         if self.options.markerStyle == 'arrow':
             extraDist = t_versor * self.arrowSize
 
@@ -779,24 +783,16 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         if self.options.markerStyle == 'serif':
             extraDist = 0
-
+            
         if not smallDimension:
-            if invertSide:  # hor.:below    ver.:to the right    paral.:above
-                Pstart = L1start + L1endRel + n_versor * (self.auxLineExtension) + extraDist
-                Pend = L2start + L2endRel + n_versor * (self.auxLineExtension) - extraDist
-            else:  # hor.:above    ver.:to the left    paral.:above
-                Pstart = L1start + L1endRel - n_versor * (self.auxLineExtension) + extraDist
-                Pend = L2start + L2endRel - n_versor * (self.auxLineExtension) - extraDist
+            Pstart = L1start + L1endRel - n_versor * (self.auxLineExtension) + extraDist
+            Pend = L2start + L2endRel - n_versor * (self.auxLineExtension) - extraDist
 
             inkDraw.line.absCoords(group, [Pstart.tolist(), Pend.tolist()], offset=[0, 0], label='dim',
                                    lineStyle=self.LINdimensionLineStyle)
         else:
-            if invertSide:  # hor.:below    ver.:to the right    paral.:above
-                Pstart = L1start + L1endRel + n_versor * (self.auxLineExtension) - extraDist
-                Pend = L2start + L2endRel + n_versor * (self.auxLineExtension) + extraDist
-            else:  # hor.:above    ver.:to the left    paral.:above
-                Pstart = L1start + L1endRel - n_versor * (self.auxLineExtension) - extraDist
-                Pend = L2start + L2endRel - n_versor * (self.auxLineExtension) + extraDist
+            Pstart = L1start + L1endRel - n_versor * (self.auxLineExtension) - extraDist
+            Pend = L2start + L2endRel - n_versor * (self.auxLineExtension) + extraDist
 
             PextStart = Pstart - t_versor * self.dimensionSpacing
             PextEnd = Pend + t_versor * self.dimensionSpacing
@@ -806,67 +802,65 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             inkDraw.line.absCoords(group, [PextEnd.tolist(), Pend.tolist()], offset=[0, 0], label='dim',
                                    lineStyle=self.ANGdimensionLineStyleSmall)
 
-        # dimension
-        if valueStr != '':
-            if not smallDimension:  # regular dimension style
-                if invertTextSide:
-                    posDim = ((Pstart + Pend) / 2.0) - n_versor * self.textOffset
+            
+        # Draw Dimension
+        if valueStr == '':
+            return group
+
+        posDim = ((Pstart + Pend) / 2.0) + n_versor * self.textOffset
+        if smallDimension:  # regular dimension style
+            posDim = ((Pstart + Pend) / 2.0)
+
+        # Keep text horizontal
+        if horizontalText:
+            textAngle = 0
+            
+            if smallDimension: 
+                justif = 'cc'
+
+            else:  # regular dimension style
+                if direction == 'parallel':
+                    textSide = 1
+                elif angle > 0:
+                    textSide *= -1
+
+                if angle < 0:
+                    posDim += n_versor * self.fontSize
+                
+                if textSide * n_versor[0] < 0:
+                    justif = 'br'
+                elif textSide * n_versor[0] > 0:
+                    justif = 'bl'
                 else:
-                    posDim = ((Pstart + Pend) / 2.0) + n_versor * self.textOffset
-            else:  # small dimension style
-                if invertTextSide:
-                    posDim = ((Pstart + Pend) / 2.0)
-                else:
-                    posDim = ((Pstart + Pend) / 2.0)
+                    justif = 'bc'
 
-            if horizontalText:
-                angle = 0
+        # Rotated Text
+        else:
+            textAngle = (180 / math.pi) * math.atan2(-t_vector[1], t_vector[0])
 
-                if not smallDimension:  # regular dimension style
-                    if direction == 'vertical':
-                        posDim = posDim - t_versor * self.fontSize / 2.0
+            if abs(abs(angle + 45/2) - 90) <= 22.5:
+                textAngle += 180
+                textSide *= -1
 
-                    if direction == 'horizontal':
-                        if invertTextSide:
-                            posDim = posDim - n_versor * self.fontSize
-
-                    if direction == 'parallel':
-                        if n_versor[1] == 0:
-                            posDim = posDim - t_versor * self.fontSize / 2.0
-                        if n_versor[0] == 0 and invertTextSide:
-                            posDim = posDim - n_versor * self.fontSize
-                        if n_versor[0] != 0 and n_versor[1] != 0:
-                            if invertTextSide:
-                                posDim = posDim - n_versor * self.fontSize / 1.5
-
-                    if invertTextSide:
-                        if n_versor[0] < 0:
-                            justif = 'bl'
-                        if n_versor[0] > 0:
-                            justif = 'br'
-                        if n_versor[0] == 0:
-                            justif = 'bc'
-                    else:
-                        if n_versor[0] < 0:
-                            justif = 'br'
-                        if n_versor[0] > 0:
-                            justif = 'bl'
-                        if n_versor[0] == 0:
-                            justif = 'bc'
-                else:
-                    justif = 'cc'
+            if abs(textAngle) == 180:
+                textAngle = 0
+                if abs(angle + 45) > 90:
+                    textSide *= -1
+                    
+            if abs(textAngle) == 90:
+                textAngle = 90
+                textSide = 1 if angle > 0 else -1
+            
+            if textSide == -1:
+                justif = 'tc'
             else:
-                angle = (180 / math.pi) * math.atan2(-t_vector[1], t_vector[0])
-                if not smallDimension:  # regular dimension style
-                    if invertTextSide:
-                        justif = 'tc'
-                    else:
-                        justif = 'bc'
-                else:
-                    justif = 'cc'
+                justif = 'bc'
+                
+            if smallDimension: 
+                justif = 'cc'
 
-            inkDraw.text.latex(self, group, valueStr, posDim, fontSize=self.fontSize, refPoint=justif,
-                               textColor=self.textColor, LatexCommands=' ', angleDeg=angle)
+        inkDraw.text.latex(self, group, valueStr, posDim, fontSize=self.fontSize, refPoint=justif,
+                           textColor=self.textColor, LatexCommands=' ', angleDeg=textAngle)
 
         return group
 
@@ -902,49 +896,12 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         [P1, P2] = self.getPoints(element)
 
-        # sets the position to the viewport center
-        position = self.getCenter(element)
-        root_layer = self.document.getroot()
-
-        # inkDraw.text.write(self,'P1='+str(P1),position,root_layer,fontSize=self.fontSize,justification='center')
-        # inkDraw.text.write(self,'P2='+str(P2),position,root_layer,fontSize=self.fontSize,justification='center')
-
-        # check whether the line segment is valid and reorder if necessary
-        if LINdirection == "horizontal":
-            if P1[0] == P2[0]:
-                inkDraw.text.write(self, 'Error: horizontal dimension is zero.', position, root_layer,
-                                   fontSize=self.fontSize, justification='center')
-                return [None, None]
-            if P2[0] < P1[0]:  # makes sure P1 has smallest xcoords
-                temp = P1
-                P1 = P2
-                P2 = temp
-
-        if LINdirection == "vertical":
-            if P1[1] == P2[1]:
-                inkDraw.text.write(self, 'Error: vertical dimension is zero.', position, root_layer,
-                                   fontSize=self.fontSize, justification='center')
-                return [None, None]
-            if P2[1] > P1[1]:  # makes sure P1 has smallest ycoords
-                temp = P1
-                P1 = P2
-                P2 = temp
-
-        if LINdirection == "parallel":
-            if P1[0] == P2[0] and P1[1] == P2[1]:
-                inkDraw.text.write(self, 'Error: dimension is zero.', position, root_layer, fontSize=self.fontSize,
-                                   justification='center')
-                return [None, None]
-            if P2[0] < P1[0]:  # makes sure P1 has smallest xcoords
-                temp = P1
-                P1 = P2
-                P2 = temp
-
-            if P2[0] == P1[0]:
-                if P2[1] > P1[1]:
-                    temp = P1
-                    P1 = P2
-                    P2 = temp
+        t_vector = np.array(P2) - np.array(P1)
+        angle = math.atan2(t_vector[1], t_vector[0]) * 180.0 / math.pi
+        if angle < 0 or angle >= 180:
+            temp = P1 
+            P1 = P2
+            P2 = temp
 
         return [P1, P2]
 
