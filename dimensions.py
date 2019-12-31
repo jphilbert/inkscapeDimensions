@@ -93,55 +93,95 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         self.OptionParser.add_option("--tab", action="store", type="string", dest="tab", default="object")
 
-        self.OptionParser.add_option("--LINdirection", action="store", type="string", dest="LINdirection", default='none')
-        self.OptionParser.add_option("--LINside", action="store", type="string", dest="LINside", default='none')
+        self.OptionParser.add_option("--LINgroup", action="store", type="inkbool",
+                                     dest="LINgroup", default=False)
+        self.OptionParser.add_option("--LINdirection", action="store", type="string",
+                                     dest="LINdirection", default='none')
+        self.OptionParser.add_option("--LINside", action="store", type="string",
+                                     dest="LINside", default='none')
         # self.OptionParser.add_option("--LINcontentsType", action="store", type="string", dest="LINcontentsType", default='none')
         # self.OptionParser.add_option("--LINinvertSide", action="store", type="inkbool", dest="LINinvertSide", default=False)
         # self.OptionParser.add_option("--LINinvertTextSide", action="store", type="inkbool", dest="LINinvertTextSide", default=False)
-        self.OptionParser.add_option("--LINhorizontalText", action="store", type="inkbool", dest="LINhorizontalText", default=False)
-        self.OptionParser.add_option("--LINsmalDimStyle", action="store", type="inkbool", dest="LINsmalDimStyle", default=False)
+
+        self.OptionParser.add_option("--LINhorizontalText", action="store", type="inkbool",
+                                     dest="LINhorizontalText", default=False)
+        self.OptionParser.add_option("--LINsmalDimStyle", action="store", type="inkbool",
+                                     dest="LINsmalDimStyle", default=False)
 
         self.OptionParser.add_option("--LINunit", action="store", type="string", dest="LINunit", default='none')
-        self.OptionParser.add_option("--LINunitSymbol", action="store", type="inkbool", dest="LINunitSymbol", default=False)
-        self.OptionParser.add_option("--LINscaleDim", action="store", type="float", dest="LINscaleDim", default=1.0)
-        self.OptionParser.add_option("--LINprecision", action="store", type="int", dest="LINprecision", default=2)
-        self.OptionParser.add_option("--LINcustomContent", action="store", type="string", dest="LINcustomContent", default='')
+        self.OptionParser.add_option("--LINunitSymbol", action="store", type="inkbool",
+                                     dest="LINunitSymbol", default=False)
+        self.OptionParser.add_option("--LINscaleDim", action="store", type="float",
+                                     dest="LINscaleDim", default=1.0)
+        self.OptionParser.add_option("--LINprecision", action="store", type="int",
+                                     dest="LINprecision", default=2)
+        self.OptionParser.add_option("--LINcustomContent", action="store", type="string",
+                                     dest="LINcustomContent", default='')
 
-        self.OptionParser.add_option("--ANGdimPosition", action="store", type="string", dest="ANGdimPosition", default='center')
-        self.OptionParser.add_option("--ANGannotationDistance", action="store", type="int", dest="ANGannotationDistance", default=50)
-        self.OptionParser.add_option("--ANGcontentsType", action="store", type="string", dest="ANGcontentsType", default='none')
-        self.OptionParser.add_option("--ANGmarkCenter", action="store", type="inkbool", dest="ANGmarkCenter", default=False)
-        self.OptionParser.add_option("--ANGinvertAngle", action="store", type="inkbool", dest="ANGinvertAngle", default=False)
-        self.OptionParser.add_option("--ANGinvertTextSide", action="store", type="inkbool", dest="ANGinvertTextSide", default=False)
-        self.OptionParser.add_option("--ANGhorizontalText", action="store", type="inkbool", dest="ANGhorizontalText", default=False)
-        self.OptionParser.add_option("--ANGsmalDimStyle", action="store", type="inkbool", dest="ANGsmalDimStyle", default=False)
+        self.OptionParser.add_option("--ANGdimPosition", action="store", type="string",
+                                     dest="ANGdimPosition", default='center')
+        self.OptionParser.add_option("--ANGannotationDistance", action="store", type="int",
+                                     dest="ANGannotationDistance", default=50)
+        self.OptionParser.add_option("--ANGcontentsType", action="store", type="string",
+                                     dest="ANGcontentsType", default='none')
+        self.OptionParser.add_option("--ANGmarkCenter", action="store", type="inkbool",
+                                     dest="ANGmarkCenter", default=False)
+        self.OptionParser.add_option("--ANGinvertAngle", action="store", type="inkbool",
+                                     dest="ANGinvertAngle", default=False)
+        self.OptionParser.add_option("--ANGinvertTextSide", action="store", type="inkbool",
+                                     dest="ANGinvertTextSide", default=False)
+        self.OptionParser.add_option("--ANGhorizontalText", action="store", type="inkbool",
+                                     dest="ANGhorizontalText", default=False)
+        self.OptionParser.add_option("--ANGsmalDimStyle", action="store", type="inkbool",
+                                     dest="ANGsmalDimStyle", default=False)
 
-        self.OptionParser.add_option("--ANGunit", action="store", type="string", dest="ANGunit", default='none')
-        self.OptionParser.add_option("--ANGprecision", action="store", type="int", dest="ANGprecision", default=2)
-        self.OptionParser.add_option("--ANGcustomContent", action="store", type="string", dest="ANGcustomContent", default='none')
+        self.OptionParser.add_option("--ANGunit", action="store", type="string",
+                                     dest="ANGunit", default='none')
+        self.OptionParser.add_option("--ANGprecision", action="store", type="int",
+                                     dest="ANGprecision", default=2)
+        self.OptionParser.add_option("--ANGcustomContent", action="store", type="string",
+                                     dest="ANGcustomContent", default='none')
 
-        self.OptionParser.add_option("--anotationScale", action="store", type="float", dest="anotationScale", default=1.0)
-        self.OptionParser.add_option("--anotationText", action="store", type="string", dest="anotationText", default='none')
-        self.OptionParser.add_option("--anotationFontSize", action="store", type="float", dest="anotationFontSize", default=1.0)
+        self.OptionParser.add_option("--anotationScale", action="store", type="float",
+                                     dest="anotationScale", default=1.0)
+        self.OptionParser.add_option("--anotationText", action="store", type="string",
+                                     dest="anotationText", default='none')
+        self.OptionParser.add_option("--anotationFontSize", action="store", type="float",
+                                     dest="anotationFontSize", default=1.0)
 
-        self.OptionParser.add_option("--useLatex", action="store", type="inkbool", dest="useLatex", default=False)
-        self.OptionParser.add_option("--removeAuxLine", action="store", type="inkbool", dest="removeAuxLine", default=False)
-        self.OptionParser.add_option("--markerStyle", action="store", type="string", dest="markerStyle", default=False)
+        self.OptionParser.add_option("--useLatex", action="store", type="inkbool", 
+                                     dest="useLatex", default=False)
+        self.OptionParser.add_option("--removeAuxLine", action="store", type="inkbool", 
+                                     dest="removeAuxLine", default=False)
+        self.OptionParser.add_option("--markerStyle", action="store", type="string", 
+                                     dest="markerStyle", default=False)
 
-        self.OptionParser.add_option("--fontSize", action="store", type="float", dest="fontSize", default=1.0)
-        self.OptionParser.add_option("--useDefaultProp", action="store", type="inkbool", dest="useDefaultProp", default=True)
+        self.OptionParser.add_option("--fontSize", action="store", type="float", 
+                                     dest="fontSize", default=1.0)
+        self.OptionParser.add_option("--useDefaultProp", action="store", type="inkbool", 
+                                     dest="useDefaultProp", default=True)
 
-        self.OptionParser.add_option("--lineWidthProp", action="store", type="float", dest="lineWidthProp", default=1.0)
-        self.OptionParser.add_option("--arrowSizeProp", action="store", type="float", dest="arrowSizeProp", default=1.0)
-        self.OptionParser.add_option("--auxLineOffsetProp", action="store", type="float", dest="auxLineOffsetProp", default=1.0)
-        self.OptionParser.add_option("--auxLineExtensionProp", action="store", type="float", dest="auxLineExtensionProp", default=1.0)
-        self.OptionParser.add_option("--textOffsetProp", action="store", type="float", dest="textOffsetProp", default=1.0)
-        self.OptionParser.add_option("--dimSpacingProp", action="store", type="float", dest="dimSpacingProp", default=1.0)
+        self.OptionParser.add_option("--lineWidthProp", action="store", type="float", 
+                                     dest="lineWidthProp", default=1.0)
+        self.OptionParser.add_option("--arrowSizeProp", action="store", type="float", 
+                                     dest="arrowSizeProp", default=1.0)
+        self.OptionParser.add_option("--auxLineOffsetProp", action="store", type="float", 
+                                     dest="auxLineOffsetProp", default=1.0)
+        self.OptionParser.add_option("--auxLineExtensionProp", action="store", type="float", 
+                                     dest="auxLineExtensionProp", default=1.0)
+        self.OptionParser.add_option("--textOffsetProp", action="store", type="float", 
+                                     dest="textOffsetProp", default=1.0)
+        self.OptionParser.add_option("--dimSpacingProp", action="store", type="float", 
+                                     dest="dimSpacingProp", default=1.0)
 
-        self.OptionParser.add_option("--textColor", action="store", type="string", dest="textColorOption", default='black')
-        self.OptionParser.add_option("--colorPickerText", action="store", type="string", dest="colorPickerText", default='0')
-        self.OptionParser.add_option("--lineColor", action="store", type="string", dest="lineColorOption", default='black')
-        self.OptionParser.add_option("--colorPickerLine", action="store", type="string", dest="colorPickerLine", default='0')
+        self.OptionParser.add_option("--textColor", action="store", type="string", 
+                                     dest="textColorOption", default='black')
+        self.OptionParser.add_option("--colorPickerText", action="store", type="string", 
+                                     dest="colorPickerText", default='0')
+        self.OptionParser.add_option("--lineColor", action="store", type="string", 
+                                     dest="lineColorOption", default='black')
+        self.OptionParser.add_option("--colorPickerLine", action="store", type="string", 
+                                     dest="colorPickerLine", default='0')
 
     def effect(self):
 
@@ -261,32 +301,40 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             lineColor=self.lineColor, markerStart=arrowStart)
 
         if so.tab == 'Linear':
-            # get points of selected object
-            for id, element in self.selected.iteritems():
-                if element.tag == inkex.addNS('path', 'svg') or element.tag == 'path':
-                    [P1, P2] = self.getPointsLinDim(element, so.LINdirection)
-                # elif element.tag == inkex.addNS('rect', 'svg') or element.tag == 'rect':
-                #     self.displayMsg(str(simpletransform.computeBBox(element)))
-                #     continue
-                #     P1 = [float(self.getElemAtrib(element, 'x')), float(self.getElemAtrib(element, 'y'))]
-                #     P2 = [P1[0] + float(self.getElemAtrib(element, 'width')),
-                #           P1[1] + float(self.getElemAtrib(element, 'height'))]
-                else:
-                    continue
-                
-                # self.displayMsg(str(P1))
-                if not P1 or not P2:
-                    continue
+            # Draw dimension for whole group
+            if so.LINgroup:
+                [P1, P2] = self.getPointsBB(self.selected.values(),
+                                            so.LINdirection, so.LINside)                
+                if P1 and P2:
+                    self.drawLinDim(root_layer, [P1, P2], direction=so.LINdirection, label='Dim',
+                                    customText=so.LINcustomContent,
+                                    unit=so.LINunit, unitSymbol=so.LINunitSymbol,
+                                    scale=so.LINscaleDim, precision=so.LINprecision,
+                                    horizontalText=so.LINhorizontalText,
+                                    textSide = so.LINside,
+                                    smallDimension=so.LINsmalDimStyle)
 
-                self.drawLinDim(root_layer, [P1, P2], direction=so.LINdirection, label='Dim',
-                                customText=so.LINcustomContent,
-                                unit=so.LINunit, unitSymbol=so.LINunitSymbol,
-                                scale=so.LINscaleDim, precision=so.LINprecision,
-                                horizontalText=so.LINhorizontalText,
-                                textSide = so.LINside,
-                                smallDimension=so.LINsmalDimStyle)
-                if so.removeAuxLine:
-                    self.removeElement(element)
+            # Draw dimensions for each element
+            else:
+                for id, element in self.selected.iteritems():
+                    if element.tag == inkex.addNS('path', 'svg') or element.tag == 'path':
+                        [P1, P2] = self.getPointsLinDim(element, so.LINdirection)
+                    else:
+                        [P1, P2] = self.getPointsBB(element, so.LINdirection, so.LINside)                    
+                        
+                    if not P1 or not P2:
+                        continue
+
+                    self.drawLinDim(root_layer, [P1, P2], direction=so.LINdirection, label='Dim',
+                                    customText=so.LINcustomContent,
+                                    unit=so.LINunit, unitSymbol=so.LINunitSymbol,
+                                    scale=so.LINscaleDim, precision=so.LINprecision,
+                                    horizontalText=so.LINhorizontalText,
+                                    textSide = so.LINside,
+                                    smallDimension=so.LINsmalDimStyle)
+                
+                    if so.removeAuxLine:
+                        self.removeElement(element)
 
         if so.tab == 'Angular':
             # get points of selected object
@@ -671,7 +719,6 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         t_vector = P2 - P1
         angle = math.atan2(t_vector[1], t_vector[0]) * 180.0 / math.pi
-
         
         if angle == 0 or angle == 180:
             direction = 'horizontal'
@@ -682,10 +729,9 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         if direction == 'auto':
             # threshold how close to 0 or 90 degrees to be for horizontal or vertical
             parallel_threshold = 15 
-            segment_angle = abs(self.getSegmentFromPoints(points)[1] * 180.0 / math.pi)
-            if abs(segment_angle - 90) < parallel_threshold:
+            if abs(abs(angle) - 90) < parallel_threshold:
                 direction = 'vertical'
-            elif segment_angle < parallel_threshold or segment_angle > (180 - parallel_threshold):
+            elif abs(angle) < parallel_threshold or abs(angle) > (180 - parallel_threshold):
                 direction = 'horizontal'
             else:
                 direction = 'parallel'
@@ -807,9 +853,9 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         if valueStr == '':
             return group
 
-        posDim = ((Pstart + Pend) / 2.0) + n_versor * self.textOffset
-        if smallDimension:  # regular dimension style
-            posDim = ((Pstart + Pend) / 2.0)
+        posDim = (Pstart + Pend) / 2.0 
+        if not smallDimension:  # regular dimension style
+            posDim += n_versor * self.textOffset
 
         # Keep text horizontal
         if horizontalText:
@@ -824,7 +870,7 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                 elif angle > 0:
                     textSide *= -1
 
-                if angle < 0:
+                if angle < 0 or angle == 180:
                     posDim += n_versor * self.fontSize
                 
                 if textSide * n_versor[0] < 0:
@@ -864,6 +910,7 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         return group
 
+
     def getPointsLinDim(self, element, LINdirection):
         """ Extracts the 2 end points from the Obj.
 
@@ -902,6 +949,39 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             temp = P1 
             P1 = P2
             P2 = temp
+
+        return [P1, P2]
+
+
+    def getPointsBB(self, element, direction, textSide):
+        if len(element) == 0:
+            element = [element]
+
+        P1 = simpletransform.computeBBox(element)
+        if P1 is None:
+            return None
+        P2 = [P1[0], P1[2]]
+        P1 = [P1[1], P1[3]]
+
+        t_vector = np.array(P2) - np.array(P1)
+        angle = math.atan2(t_vector[1], t_vector[0]) * 180.0 / math.pi
+        if angle < 0 or angle >= 180:
+            temp = P1 
+            P1 = P2
+            P2 = temp
+
+        if direction == 'auto':
+            x = abs(P1[0] - P2[0])
+            y = abs(P1[1] - P2[1])
+            direction = 'vertical' if y > x else 'horizontal'
+                
+        textSide = 1 if textSide == 'upperLeft' else -1        
+        if direction == 'horizontal':
+            p = textSide * min(textSide*P1[1], textSide*P2[1])
+            P1[1] = P2[1] = p
+        if direction == 'vertical':
+            p = textSide * min(textSide*P1[0], textSide*P2[0])
+            P1[0] = P2[0] = p
 
         return [P1, P2]
 

@@ -8,7 +8,8 @@
   <dependency type="executable" location="extensions">inkex.py</dependency>
     <param name="tab" type="notebook">
         <page name="Linear" appearance="minimal" _gui-text="Linear">
-          
+          <param name="LINgroup"      type="boolean" _gui-text="Use Group">False</param>
+
           <param name="LINdirection" type="optiongroup" appearance="minimal" _gui-text="Direction:">
             <_option value="auto">Auto</_option>
             <_option value="horizontal">Horizontal</_option>
@@ -45,7 +46,7 @@
           <param name="LINunitSymbol"      type="boolean" _gui-text="Add unit symbol">False</param>
           <param name="LINscaleDim" type="float" min="0.01"    max="100" precision="2"   _gui-text="Dimension scale factor (default: 1.0)">1.0</param>
           <param name="LINprecision"    type="int"   min="0"   max="5"    _gui-text="Digits of precision:">0</param>
-          <param name="LINcustomContent" type="string"  _gui-text="Custom contents:">value</param>
+          <param name="LINcustomContent" type="string"  _gui-text="Custom contents:"></param>
         </page>
         
         <page name="Angular" appearance="minimal" _gui-text="Angular">
