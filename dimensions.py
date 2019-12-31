@@ -8,7 +8,7 @@ import inkscapeMadeEasy_Draw as inkDraw
 import numpy as np
 
 import inkex
-import simpletransform
+import simpletransform, simplestyle
 # import inkex.transforms
 # import gettext
 # _ = gettext.gettext
@@ -874,11 +874,11 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                     posDim += n_versor * self.fontSize
                 
                 if textSide * n_versor[0] < 0:
-                    justif = 'br'
+                    justif = 'cr'
                 elif textSide * n_versor[0] > 0:
-                    justif = 'bl'
+                    justif = 'cl'
                 else:
-                    justif = 'bc'
+                    justif = 'cc'
 
         # Rotated Text
         else:
@@ -956,12 +956,19 @@ class Dimensions(inkBase.inkscapeMadeEasy):
     def getPointsBB(self, element, direction, textSide):
         if len(element) == 0:
             element = [element]
-
+            
+        # Find the stroke width
+        try:
+            style = simplestyle.parseStyle(element[0].get('style'))
+            strokeWidth = float(style['stroke-width']) * (style['stroke'] != 'none')
+        except:
+            strokeWidth = 0
+        
         P1 = simpletransform.computeBBox(element)
         if P1 is None:
             return None
-        P2 = [P1[0], P1[2]]
-        P1 = [P1[1], P1[3]]
+        P2 = [P1[0] - strokeWidth / 2, P1[2] - strokeWidth / 2]
+        P1 = [P1[1] + strokeWidth / 2, P1[3] + strokeWidth / 2]
 
         t_vector = np.array(P2) - np.array(P1)
         angle = math.atan2(t_vector[1], t_vector[0]) * 180.0 / math.pi
