@@ -115,6 +115,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                                      dest="LINscaleDim", default=1.0)
         self.OptionParser.add_option("--LINprecision", action="store", type="int",
                                      dest="LINprecision", default=2)
+        self.OptionParser.add_option("--LINtrimzero", action="store", type="inkbool",
+                                     dest="LINtrimzero", default=True)
         self.OptionParser.add_option("--LINcustomContent", action="store", type="string",
                                      dest="LINcustomContent", default='')
 
@@ -312,7 +314,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                                     scale=so.LINscaleDim, precision=so.LINprecision,
                                     horizontalText=so.LINhorizontalText,
                                     textSide = so.LINside,
-                                    smallDimension=so.LINsmalDimStyle)
+                                    smallDimension=so.LINsmalDimStyle,
+                                    trimTrailingZero = so.LINtrimzero)
 
             # Draw dimensions for each element
             else:
@@ -331,7 +334,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                                     scale=so.LINscaleDim, precision=so.LINprecision,
                                     horizontalText=so.LINhorizontalText,
                                     textSide = so.LINside,
-                                    smallDimension=so.LINsmalDimStyle)
+                                    smallDimension=so.LINsmalDimStyle,
+                                    trimTrailingZero = so.LINtrimzero)
                 
                     if so.removeAuxLine:
                         self.removeElement(element)
@@ -689,7 +693,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                    customText='',
                    unit=None, unitSymbol=False,
                    scale=1.0, precision=2, horizontalText=False,
-                   smallDimension=False):
+                   smallDimension=False,
+                   trimTrailingZero = True):
         """ draws linear dimension
 
         parent: parent object
@@ -793,7 +798,9 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             value = np.linalg.norm(n_vector)                
             value = self.unit2unit(value, self.documentUnit, unit) / self.documentScale
             valueStr = '%.*f' % (precision, value * scale)
-
+            if precision > 0 and trimTrailingZero:
+                valueStr = valueStr.rstrip('0').rstrip('.')
+                
             if unitSymbol:
                 if unit and unit != 'none':
                     if self.useLatex:
@@ -870,7 +877,7 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                 elif angle > 0:
                     textSide *= -1
 
-                if angle < 0 or angle == 180:
+                if angle <= 0 or angle == 180:
                     posDim += n_versor * self.fontSize
                 
                 if textSide * n_versor[0] < 0:
@@ -956,13 +963,22 @@ class Dimensions(inkBase.inkscapeMadeEasy):
     def getPointsBB(self, element, direction, textSide):
         if len(element) == 0:
             element = [element]
-            
+
         # Find the stroke width
-        try:
-            style = simplestyle.parseStyle(element[0].get('style'))
-            strokeWidth = float(style['stroke-width']) * (style['stroke'] != 'none')
-        except:
-            strokeWidth = 0
+        def getMaxStroke(e):
+            w = 0
+            for n in e:
+                try:
+                    style = simplestyle.parseStyle(n.get('style'))
+                    strokeWidth = float(style['stroke-width']) * (style['stroke'] != 'none')
+                except:
+                    strokeWidth = 0
+                w = max(strokeWidth, w)
+                w = max(getMaxStroke(n), w)
+            return w
+                
+        strokeWidth = getMaxStroke(element)
+
         
         P1 = simpletransform.computeBBox(element)
         if P1 is None:

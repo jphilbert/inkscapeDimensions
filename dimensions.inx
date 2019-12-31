@@ -46,6 +46,8 @@
           <param name="LINunitSymbol"      type="boolean" _gui-text="Add unit symbol">False</param>
           <param name="LINscaleDim" type="float" min="0.01"    max="100" precision="2"   _gui-text="Dimension scale factor (default: 1.0)">1.0</param>
           <param name="LINprecision"    type="int"   min="0"   max="5"    _gui-text="Digits of precision:">0</param>
+          <param name="LINtrimzero"    type="boolean"
+			  _gui-text="Trim Trailing Zeros">True</param>
           <param name="LINcustomContent" type="string"  _gui-text="Custom contents:"></param>
         </page>
         
