@@ -162,7 +162,7 @@ https://github.com/fsmMLK/inkscapeDimensions
     <effect>
         <object-type>all</object-type>
         <effects-menu>
-            <submenu _name="fsmMLK"/>
+            <submenu _name="Dimensions"/>
         </effects-menu>
     </effect>
     <script>

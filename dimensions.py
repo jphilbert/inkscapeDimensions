@@ -836,24 +836,26 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         if self.options.markerStyle == 'serif':
             extraDist = 0
-            
-        if not smallDimension:
-            Pstart = L1start + L1endRel - n_versor * (self.auxLineExtension) + extraDist
-            Pend = L2start + L2endRel - n_versor * (self.auxLineExtension) - extraDist
 
+        Pstart = L1start + L1endRel - n_versor * (self.auxLineExtension) + extraDist
+        Pend = L2start + L2endRel - n_versor * (self.auxLineExtension) - extraDist
+        
+        if not smallDimension:
+            Pstart += extraDist
+            Pend -= extraDist
             inkDraw.line.absCoords(group, [Pstart.tolist(), Pend.tolist()], offset=[0, 0], label='dim',
                                    lineStyle=self.LINdimensionLineStyle)
         else:
-            Pstart = L1start + L1endRel - n_versor * (self.auxLineExtension) - extraDist
-            Pend = L2start + L2endRel - n_versor * (self.auxLineExtension) + extraDist
-
+            extraDist = t_versor * self.arrowSize
+            Pstart -= extraDist
+            Pend += extraDist
             PextStart = Pstart - t_versor * self.dimensionSpacing
             PextEnd = Pend + t_versor * self.dimensionSpacing
 
             inkDraw.line.absCoords(group, [PextStart.tolist(), Pstart.tolist()], offset=[0, 0], label='dim',
-                                   lineStyle=self.ANGdimensionLineStyleSmall)
+                                   lineStyle = self.ANGdimensionLineStyleSmall)
             inkDraw.line.absCoords(group, [PextEnd.tolist(), Pend.tolist()], offset=[0, 0], label='dim',
-                                   lineStyle=self.ANGdimensionLineStyleSmall)
+                                   lineStyle = self.ANGdimensionLineStyleSmall)
 
             
         # Draw Dimension
