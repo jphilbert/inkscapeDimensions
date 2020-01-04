@@ -10,25 +10,28 @@
 
     <!-- Linear Dimension -->
     <page name="Linear" appearance="minimal" _gui-text="Linear">
-      <param name="LINgroup"      type="boolean" _gui-text="Use Group">False</param>
 
-      <param name="LINdirection" type="optiongroup" _gui-text="Direction:">
-        <_option value="auto">Auto</_option>
+      <param name="LINdirection" type="optiongroup" appearance="minimal" _gui-text="Direction:">
         <_option value="horizontal">Horizontal</_option>
         <_option value="vertical">Vertical</_option>
-        <_option value="parallel">Parallel</_option>
+	   <_option value="auto">Auto</_option>
+        <_option value="parallel">Diagonal</_option>
       </param>
 
       <param name="LINside" type="optiongroup"
+		   appearance="minimal"
 		   _gui-text="Text Side:">
         <_option value="upperLeft">Upper Left</_option>
         <_option value="lowerRight">Lower Right</_option>
       </param>
-	 
-      <param name="LINhorizontalText"      type="boolean" _gui-text="Keep text horizontal">False</param>
-      <param name="LINsmalDimStyle"      type="boolean" _gui-text="Small dimension style">False</param>
-      
-      <param name="desc1" type="description" appearance="header">Contents</param>
+
+	 <param name="LINgroup"			type="boolean"
+		   _gui-text="Use selected group over individual objects">False</param>
+      <param name="LINsmalDimStyle"     type="boolean"
+		   _gui-text="Small dimension style">False</param>
+
+	 <!-- Text Options -->      
+      <param name="desc1" type="description" appearance="header">Dimension Text</param>
       <param name="LINunit" type="optiongroup" appearance="minimal" _gui-text="Unit:">
         <_option value="doc">(document units)</_option>
         <_option value="mm">mm</_option>
@@ -38,12 +41,8 @@
         <_option value="ft">ft</_option>
         <_option value="px">pixel</_option>
       </param>
-      <param name="LINunitSymbol"      type="boolean"
-		   _gui-text="Add unit symbol">False</param>
-
-	 <param name="LINexpandInches"      type="boolean"
-		   _gui-text="Expand Inches into Feet-Inches">True</param>
-	 <param name="LINprecision" type="optiongroup" appearance="minimal"
+	 
+      <param name="LINprecision" type="optiongroup" appearance="minimal"
 		   _gui-text="Precision:">
 	   <_option value="p0">1</_option>
         <_option value="2">1/2</_option>
@@ -57,15 +56,22 @@
         <_option value="p4">0.0001</_option>
         <_option value="p5">0.00001</_option>
       </param>
+
+	 <param name="LINhorizontalText"   type="boolean"
+		   _gui-text="Keep text horizontal">False</param>
 	 
+	 <param name="LINunitSymbol"      type="boolean"
+		   _gui-text="Add unit symbol">False</param>
+
+	 <param name="LINexpandInches"      type="boolean"
+		   _gui-text="Expand inches into feet + inches">True</param>
 	 
       <param name="LINtrimzero"    type="boolean"
-		   _gui-text="Trim Trailing Zeros">True</param>
+		   _gui-text="Trim trailing zeros">True</param>
 
-	 <param name="LINscaleDim" type="float" min="0.01"    max="100"
-		   precision="2"   
-		   _gui-text="Dimension scale factor (default: 1.0)">1.0</param>
-
+	 <!-- <param name="LINscaleDim" type="float" min="0.01"    max="100" -->
+	 <!-- 	   precision="2"    -->
+	 <!-- 	   _gui-text="Dimension scale factor (default: 1.0)">1.0</param> -->
 	 
       <param name="LINcustomContent" type="string"  _gui-text="Custom contents:"></param>
     </page>

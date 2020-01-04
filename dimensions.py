@@ -118,8 +118,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         self.OptionParser.add_option("--LINtrimzero", action="store", type="inkbool",
                                      dest="LINtrimzero", default=True)
 
-        self.OptionParser.add_option("--LINscaleDim", action="store", type="float",
-                                     dest="LINscaleDim", default=1.0)
+        # self.OptionParser.add_option("--LINscaleDim", action="store", type="float",
+        #                              dest="LINscaleDim", default=1.0)
         self.OptionParser.add_option("--LINcustomContent", action="store", type="string",
                                      dest="LINcustomContent", default='')
 
@@ -330,7 +330,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                     self.drawLinDim(root_layer, [P1, P2], direction=so.LINdirection, label='Dim',
                                     customText=so.LINcustomContent,
                                     unit=so.LINunit, unitSymbol=so.LINunitSymbol,
-                                    scale=so.LINscaleDim, precision=so.LINprecision,
+                                    # scale=so.LINscaleDim,
+                                    precision=so.LINprecision,
                                     horizontalText=so.LINhorizontalText,
                                     textSide = so.LINside,
                                     smallDimension=so.LINsmalDimStyle,
@@ -351,7 +352,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                     self.drawLinDim(root_layer, [P1, P2], direction=so.LINdirection, label='Dim',
                                     customText=so.LINcustomContent,
                                     unit=so.LINunit, unitSymbol=so.LINunitSymbol,
-                                    scale=so.LINscaleDim, precision=so.LINprecision,
+                                    # scale=so.LINscaleDim,
+                                    precision=so.LINprecision,
                                     horizontalText=so.LINhorizontalText,
                                     textSide = so.LINside,
                                     smallDimension=so.LINsmalDimStyle,
