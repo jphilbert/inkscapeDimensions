@@ -93,33 +93,39 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         self.OptionParser.add_option("--tab", action="store", type="string", dest="tab", default="object")
 
+        ########################################
+        # Linear Options 
+        ########################################
         self.OptionParser.add_option("--LINgroup", action="store", type="inkbool",
                                      dest="LINgroup", default=False)
         self.OptionParser.add_option("--LINdirection", action="store", type="string",
                                      dest="LINdirection", default='none')
         self.OptionParser.add_option("--LINside", action="store", type="string",
                                      dest="LINside", default='none')
-        # self.OptionParser.add_option("--LINcontentsType", action="store", type="string", dest="LINcontentsType", default='none')
-        # self.OptionParser.add_option("--LINinvertSide", action="store", type="inkbool", dest="LINinvertSide", default=False)
-        # self.OptionParser.add_option("--LINinvertTextSide", action="store", type="inkbool", dest="LINinvertTextSide", default=False)
-
         self.OptionParser.add_option("--LINhorizontalText", action="store", type="inkbool",
                                      dest="LINhorizontalText", default=False)
         self.OptionParser.add_option("--LINsmalDimStyle", action="store", type="inkbool",
                                      dest="LINsmalDimStyle", default=False)
-
-        self.OptionParser.add_option("--LINunit", action="store", type="string", dest="LINunit", default='none')
+        self.OptionParser.add_option("--LINunit", action="store", type="string",
+                                     dest="LINunit", default='none')
         self.OptionParser.add_option("--LINunitSymbol", action="store", type="inkbool",
                                      dest="LINunitSymbol", default=False)
-        self.OptionParser.add_option("--LINscaleDim", action="store", type="float",
-                                     dest="LINscaleDim", default=1.0)
-        self.OptionParser.add_option("--LINprecision", action="store", type="int",
-                                     dest="LINprecision", default=2)
+
+        self.OptionParser.add_option("--LINexpandInches", action="store", type="inkbool",
+                                     dest="LINexpandInches", default=True)
+        self.OptionParser.add_option("--LINprecision", action="store", type="string",
+                                     dest="LINprecision", default="16")
         self.OptionParser.add_option("--LINtrimzero", action="store", type="inkbool",
                                      dest="LINtrimzero", default=True)
+
+        self.OptionParser.add_option("--LINscaleDim", action="store", type="float",
+                                     dest="LINscaleDim", default=1.0)
         self.OptionParser.add_option("--LINcustomContent", action="store", type="string",
                                      dest="LINcustomContent", default='')
 
+        ########################################
+        # Angular Options 
+        ########################################
         self.OptionParser.add_option("--ANGdimPosition", action="store", type="string",
                                      dest="ANGdimPosition", default='center')
         self.OptionParser.add_option("--ANGannotationDistance", action="store", type="int",
@@ -136,7 +142,6 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                                      dest="ANGhorizontalText", default=False)
         self.OptionParser.add_option("--ANGsmalDimStyle", action="store", type="inkbool",
                                      dest="ANGsmalDimStyle", default=False)
-
         self.OptionParser.add_option("--ANGunit", action="store", type="string",
                                      dest="ANGunit", default='none')
         self.OptionParser.add_option("--ANGprecision", action="store", type="int",
@@ -144,13 +149,19 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         self.OptionParser.add_option("--ANGcustomContent", action="store", type="string",
                                      dest="ANGcustomContent", default='none')
 
+        ########################################
+        # Annotation Options 
+        ########################################
         self.OptionParser.add_option("--anotationScale", action="store", type="float",
                                      dest="anotationScale", default=1.0)
         self.OptionParser.add_option("--anotationText", action="store", type="string",
                                      dest="anotationText", default='none')
         self.OptionParser.add_option("--anotationFontSize", action="store", type="float",
                                      dest="anotationFontSize", default=1.0)
-
+        
+        ########################################
+        # General Options 
+        ########################################
         self.OptionParser.add_option("--useLatex", action="store", type="inkbool", 
                                      dest="useLatex", default=False)
         self.OptionParser.add_option("--removeAuxLine", action="store", type="inkbool", 
@@ -176,6 +187,9 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         self.OptionParser.add_option("--dimSpacingProp", action="store", type="float", 
                                      dest="dimSpacingProp", default=1.0)
 
+        ########################################
+        # Colors 
+        ########################################
         self.OptionParser.add_option("--textColor", action="store", type="string", 
                                      dest="textColorOption", default='black')
         self.OptionParser.add_option("--colorPickerText", action="store", type="string", 
@@ -185,6 +199,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         self.OptionParser.add_option("--colorPickerLine", action="store", type="string", 
                                      dest="colorPickerLine", default='0')
 
+        
+
     def effect(self):
 
         so = self.options
@@ -192,6 +208,7 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         self.documentUnit = self.getDocumentUnit()
 
+        # Get the document scale
         try:
             elem = self.getElemFromXpath('/svg:svg')
             width = self.getElemAtrib(elem, 'width')
@@ -205,15 +222,13 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         except:
             self.documentScale = 1
 
-        # root_layer = self.current_layer
-        # root_layer = self.document.getroot()
         root_layer = self.getcurrentLayer()
 
-        # colors
+        # Colors
         [self.textColor, alpha] = inkDraw.color.parseColorPicker(so.textColorOption, so.colorPickerText)
         [self.lineColor, alpha] = inkDraw.color.parseColorPicker(so.lineColorOption, so.colorPickerLine)
 
-        # text size and font style
+        # Text Size and Font Style
         if not inkDraw.useLatex:
             self.useLatex = False
         else:
@@ -242,8 +257,9 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             self.dimensionSpacing = (2.0 * self.fontSize) * so.dimSpacingProp
             self.textOffset = (self.fontSize / 2.5) * so.textOffsetProp  # offset between symbol and text
 
-        # linestyles
-        self.auxiliaryLineStyle = inkDraw.lineStyle.set(lineWidth=self.lineWidth, lineColor=self.lineColor)
+        # Linestyles
+        self.auxiliaryLineStyle = inkDraw.lineStyle.set(lineWidth=self.lineWidth, lineColor=self.lineColor,
+                                                        lineJoin = 'miter', lineCap = 'square')
 
         renameMode = 2  # 0: do not create, , 1: overwrite  2: new name
 
@@ -295,12 +311,15 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         # used with smalldimension
         self.ANGdimensionLineStyleSmall = inkDraw.lineStyle.set(
-            lineWidth=self.lineWidth, lineColor=self.lineColor, markerEnd=arrowEnd)
+            lineWidth=self.lineWidth, lineColor=self.lineColor, markerEnd=arrowEnd,
+            lineJoin = 'miter', lineCap = 'square')
         self.ANGdimensionLineStyleSmall2 = inkDraw.lineStyle.set(
-            lineWidth=self.lineWidth, lineColor=self.lineColor, markerStart=arrowStart)
+            lineWidth=self.lineWidth, lineColor=self.lineColor, markerStart=arrowStart,
+            lineJoin = 'miter', lineCap = 'square')
         self.annotationLineStyle = inkDraw.lineStyle.set(
             lineWidth=self.lineWidth * so.anotationScale,
-            lineColor=self.lineColor, markerStart=arrowStart)
+            lineColor=self.lineColor, markerStart=arrowStart,
+            lineJoin = 'miter', lineCap = 'square')
 
         if so.tab == 'Linear':
             # Draw dimension for whole group
@@ -315,7 +334,8 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                                     horizontalText=so.LINhorizontalText,
                                     textSide = so.LINside,
                                     smallDimension=so.LINsmalDimStyle,
-                                    trimTrailingZero = so.LINtrimzero)
+                                    trimTrailingZero = so.LINtrimzero,
+                                    expandInches = so.LINexpandInches)
 
             # Draw dimensions for each element
             else:
@@ -335,11 +355,14 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                                     horizontalText=so.LINhorizontalText,
                                     textSide = so.LINside,
                                     smallDimension=so.LINsmalDimStyle,
-                                    trimTrailingZero = so.LINtrimzero)
+                                    trimTrailingZero = so.LINtrimzero,
+                                    expandInches = so.LINexpandInches)
                 
                     if so.removeAuxLine:
                         self.removeElement(element)
 
+
+                        
         if so.tab == 'Angular':
             # get points of selected object
             for id, element in self.selected.iteritems():
@@ -352,11 +375,15 @@ class Dimensions(inkBase.inkscapeMadeEasy):
                 if so.removeAuxLine:
                     self.removeElement(element)
 
+
+                    
         if so.tab == 'Arrow':
             for id, element in self.selected.iteritems():
                 self.drawAnnotationArrow(root_layer, element, contents=so.anotationText, scale=so.anotationScale)
                 self.removeElement(element)
 
+
+                
     def drawAnnotationArrow(self, parent, auxElement, label='annotation', contents='textHere', nLines=1, scale=1.0):
         """ draws annotation Arrow
 
@@ -388,12 +415,14 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             nLines = len(contents.split('\\n'))
             pos = [P2[0], P2[1] - self.fontSize * scale / 3.0 - (nLines - 1) * self.fontSize * scale * 1.2]
 
-        text = inkDraw.text.latex(self, group, contents, pos, textColor=self.textColor, fontSize=self.fontSize * scale,
+        text = inkDraw.text.latex(self, group, contents, pos,
+                                  textColor=self.textColor, fontSize=self.fontSize * scale,
                                   refPoint=justif)
 
         [Pmin, Pmax] = self.getBoundingBox(text)
 
         return group
+
 
     def centerMark(self, parent, pos):
         inkDraw.line.relCoords(parent, [[-2.5, 0], [5, 0]], offset=pos, lineStyle=self.auxiliaryLineStyle)
@@ -688,13 +717,15 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             inkDraw.text.latex(self, group, valueStr, posDim, fontSize=self.fontSize, refPoint=justif,
                                textColor=self.textColor, LatexCommands=' ', angleDeg=angle)
 
+
     def drawLinDim(self, parent, points, direction, label='Dim',
                    textSide = 'lowerRight',
                    customText='',
                    unit=None, unitSymbol=False,
                    scale=1.0, precision=2, horizontalText=False,
                    smallDimension=False,
-                   trimTrailingZero = True):
+                   trimTrailingZero = True,
+                   expandInches = False):
         """ draws linear dimension
 
         parent: parent object
@@ -791,22 +822,51 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         
         # Text String
         valueStr = customText
+        # If custom text is empty, calculate dimension from points
         if valueStr is None or len(valueStr.strip()) == 0:
             if unit == 'doc':
                 unit = self.documentUnit
                 
             value = np.linalg.norm(n_vector)                
             value = self.unit2unit(value, self.documentUnit, unit) / self.documentScale
-            valueStr = '%.*f' % (precision, value * scale)
-            if precision > 0 and trimTrailingZero:
-                valueStr = valueStr.rstrip('0').rstrip('.')
+            valueStr = value * scale
+            
+            if unitSymbol and unit == 'in':
+                if expandInches:
+                    valueStr = self.inches2ft(valueStr)
+                else:
+                    valueStr = [0, valueStr]
+                    
+                if precision[0] == 'p':
+                    precision = int(precision[1])
+                    valueStr[1] = '%.*f' % (precision, valueStr[1])
+                    if precision > 0 and trimTrailingZero:
+                        valueStr[1] = valueStr[1].rstrip('0').rstrip('.')            
+                else:
+                    valueStr[1] = self.format_as_fraction(valueStr[1], maxDenominator = int(precision))
+                valueStr = self.format_feet_inches(valueStr)
                 
-            if unitSymbol:
-                if unit and unit != 'none':
+            else:
+                if precision[0] == 'p':
+                    precision = int(precision[1])
+                else:
+                    precision = 2
+                    
+                valueStr = '%.*f' % (precision, value)
+                if precision > 0 and trimTrailingZero:
+                    valueStr = valueStr.rstrip('0').rstrip('.')
+                
+                if unitSymbol and unit and unit != 'none':
                     if self.useLatex:
                         valueStr = '\SI{%s}{%s}' % (valueStr, unit)
                     else:
-                        valueStr = valueStr + ' ' + unit            
+                        if unit == 'in':
+                            unit = '"'
+                        elif unit == 'ft':
+                            unit = "'"
+                        else:
+                            unit = ' ' + unit                    
+                        valueStr = valueStr + unit            
 
 
         ########################################
@@ -828,14 +888,9 @@ class Dimensions(inkBase.inkscapeMadeEasy):
 
         
         # Draw Dimension Line
+        extraDist = 0
         if self.options.markerStyle == 'arrow':
             extraDist = t_versor * self.arrowSize
-
-        if self.options.markerStyle == 'circle':
-            extraDist = 0
-
-        if self.options.markerStyle == 'serif':
-            extraDist = 0
 
         Pstart = L1start + L1endRel - n_versor * (self.auxLineExtension) + extraDist
         Pend = L2start + L2endRel - n_versor * (self.auxLineExtension) - extraDist
@@ -849,8 +904,9 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             extraDist = t_versor * self.arrowSize
             Pstart -= extraDist
             Pend += extraDist
-            PextStart = Pstart - t_versor * self.dimensionSpacing
-            PextEnd = Pend + t_versor * self.dimensionSpacing
+            arrowTailScale = 3
+            PextStart = Pstart - t_versor * self.dimensionSpacing/arrowTailScale
+            PextEnd = Pend + t_versor * self.dimensionSpacing/arrowTailScale
 
             inkDraw.line.absCoords(group, [PextStart.tolist(), Pstart.tolist()], offset=[0, 0], label='dim',
                                    lineStyle = self.ANGdimensionLineStyleSmall)
@@ -863,14 +919,16 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             return group
 
         posDim = (Pstart + Pend) / 2.0 
-        if not smallDimension:  # regular dimension style
+        if not (smallDimension and value > 4 * self.fontSize):  # regular dimension style
             posDim += n_versor * self.textOffset
 
         # Keep text horizontal
         if horizontalText:
             textAngle = 0
-            
-            if smallDimension: 
+
+            self.displayMsg(str(value))
+            self.displayMsg(str(4 * self.fontSize))
+            if smallDimension and value > 4 * self.fontSize: 
                 justif = 'cc'
 
             else:  # regular dimension style
@@ -1009,6 +1067,61 @@ class Dimensions(inkBase.inkscapeMadeEasy):
             P1[0] = P2[0] = p
 
         return [P1, P2]
+
+
+    def inches2ft(self, inches):
+        return [int(inches / 12), inches % 12]
+
+
+    def format_feet_inches(self, ft_inch, useShortUnit = True):
+        if useShortUnit:
+            ftUnit = "'"
+            inchUnit = '"'
+        else:
+            ftUnit = "ft"
+            inchUnit = 'in'
+
+        if not isinstance(ft_inch, list):
+            return str(ft_inch) + inchUnit
+
+        ft = ''
+        inch = ''
+        if ft_inch[0] and ft_inch[0] != 0:
+            ft = str(ft_inch[0]) + ftUnit
+        if ft_inch[1] and ft_inch[1] != 0 and len(ft_inch[1]) > 0:
+            inch = str(ft_inch[1]) + inchUnit
+
+        if len(ft) > 0 and len(inch) > 0:
+            ft = ft + ' '
+
+        return ft + inch
+
+
+    def format_as_fraction(self, x, maxDenominator = 16, delimiter = '-'):
+        x = round(x * maxDenominator) / maxDenominator
+        whole = int(x)
+        if whole == 0:
+            whole = ''
+        else:
+            whole = str(whole) 
+        frac = x % 1
+        if frac != 0:
+            frac = frac.as_integer_ratio()
+            frac = str(frac[0]) + '/' + str(frac[1])        
+        else:
+            frac = ''
+
+        if len(whole) > 0 and len(frac) > 0:
+            return whole + delimiter + frac
+        elif len(whole) > 0:
+            return whole
+        else:
+            return frac
+
+
+# x = inches2ft(62 + 1/16 + 0.1)
+# x[1] = format_as_fraction(x[1])
+# print(format_feet_inches(x, useShortUnit = False))
 
 
 if __name__ == '__main__':
