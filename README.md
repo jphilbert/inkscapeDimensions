@@ -1,3 +1,22 @@
+### Changes from fsmMLK
+  - Seperated **Linear** and **Annotation** into individual extensions
+  - Removed various parameters not used by me 
+  - **Linear** Changes:
+    - proper calculation of length on document unit and scale change
+    - added calculation of length of bounding boxes
+    - added conversion of inches > 12 to feet + inches
+    - changed inch and feet unit to " and '
+    - added conversion of decimals to fractions
+    - added removing trailing zeros
+    - adde offsetting dimension for *super* small dimensions
+  - **Annotation** Changes:
+    - correctly offset start of annotation to account for arror
+    - added auto creation of third point (now accepts 2 or 3 point path)
+    
+To Do:
+  - add better error messages on bad bounding box
+  - document (code and tooltips)
+
 # dimensions
 Inkscape extension to assist creating dimension annotations.
 
