@@ -11,23 +11,6 @@ import inkex
 import simpletransform, simplestyle
 
 
-class lineSegment(inkBase.inkscapeMadeEasy):
-    def __init__(self, Pstart, Pend, normalDirection='R'):
-        self.Pstart = np.array(Pstart)
-        self.Pend = np.array(Pend)
-        [self.length, self.theta,
-         self.t_versor, self.n_versor] = self.getSegmentFromPoints(
-             [Pstart, Pend],
-             normalDirection)
-
-        while self.theta < 0:
-            self.theta += 2.0 * math.pi
-
-    def getPointAtLength(self, length):
-        return self.Pstart + length * self.t_versor
-
-
-
 class DimensionsLinear(inkBase.inkscapeMadeEasy):
     def __init__(self):
         inkBase.inkscapeMadeEasy.__init__(self)
@@ -96,7 +79,6 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
             "--lineColor", action="store", type="string", 
             dest="lineColorOption", default='black')
 
-        
 
     def effect(self):
         so = self.options
@@ -140,7 +122,7 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
         self.auxLineExtension = (self.fontSize / 2.5)
         self.dimensionSpacing = (2.0 * self.fontSize)
         # offset between symbol and text
-        self.textOffset = (self.fontSize / 2.5)  
+        self.textOffset = (self.fontSize / 2)  
 
         # Linestyles
         self.auxiliaryLineStyle = inkDraw.lineStyle.set(
@@ -445,15 +427,32 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
             return group
 
         posDim = (Pstart + Pend) / 2.0
-        # regular dimension style
-        if not (smallDimension and value > 4 * self.fontSize):
+
+        # increases from 0 to 1 as more horizontal the dimension becomes
+        horizontalRatio = abs(abs(angle) - 90)/90
+
+        # Probably can do alot of this better by calculating the normal vector
+        # of the text
+        relFontSize = (
+            self.fontSize * (1-horizontalRatio) +
+            (len(valueStr) * self.fontSize * 7 / 10) * horizontalRatio)
+        
+        # If the gap is too tight or won't fit the text, offset it a bit
+        if value < relFontSize + relFontSize/2:
+            # smallDimension will center but since it won't fit, toggle off
+            smallDimension = False
+            # add a slight offset
+            posDim += n_versor * self.textOffset/2
+        
+        # Regular Dimension Style offset (else keep centered)
+        if not smallDimension:
             posDim += n_versor * self.textOffset
 
-        # Keep text horizontal
+        # Horizontal
         if horizontalText:
             textAngle = 0
 
-            if smallDimension and value > 4 * self.fontSize: 
+            if smallDimension: 
                 justif = 'cc'
 
             else:  # regular dimension style
@@ -462,8 +461,8 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
                 elif angle > 0:
                     textSide *= -1
 
-                if angle <= 0 or angle == 180:
-                    posDim += n_versor * self.fontSize
+                # offset more horizontal the dimension gets
+                posDim += n_versor * self.fontSize * horizontalRatio/2
                 
                 if textSide * n_versor[0] < 0:
                     justif = 'cr'
@@ -557,7 +556,8 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
             for n in e:
                 try:
                     style = simplestyle.parseStyle(n.get('style'))
-                    strokeWidth = float(style['stroke-width']) * (style['stroke'] != 'none')
+                    strokeWidth = (float(style['stroke-width']) *
+                                   (style['stroke'] != 'none'))
                 except:
                     strokeWidth = 0
                 w = max(strokeWidth, w)

@@ -28,17 +28,18 @@
   <!-- Marker -->
   <param name="desc1" type="description"
 	    appearance="header">Dimension Marker</param>
+  
   <param name="markerStyle" type="optiongroup"
 	    appearance="minimal"
 	    _gui-text="Marker style:">
+    <_option value="serif">Serif</_option>
     <_option value="arrow">Arrow</_option>
     <_option value="circle">Circle</_option>
-    <_option value="serif">Serif</_option>
   </param>
   
   <param name="smalDimStyle"
 	    type="boolean"
-	    _gui-text="Small dimension style"
+	    _gui-text="Use small dimension style"
 	    indent="1">False</param>
 
   <param name="lineColor" type="optiongroup"
@@ -90,10 +91,6 @@
   <param name="desc" type="description"
 	    appearance="header">Dimension Text</param>
 
-  <param name="customContent" type="string"
-	    _gui-text="Custom contents:"
-	    _gui-description="Leave empty to calculate from object"></param>
-
   <param name="unit" type="optiongroup"
 	    appearance="minimal" _gui-text="Unit:">
     <_option value="doc">(document units)</_option>
@@ -129,7 +126,7 @@
 	    indent="1">True</param>
   <param name="expandInches"      type="boolean"
 	    _gui-text="Expand inches into feet + inches"
-	    _gui-description="Only used if Unit is inches. Converts values such as 13in to 1ft 1in"
+	    _gui-description="Only used if Unit is inches. Converts values such as 14in to 1ft 2in"
 	    indent="1">True</param>
   
   <param name="textColor" type="optiongroup"
@@ -157,7 +154,12 @@
 	    type="float" min="0.001"    max="50"
 	    precision="3"
 	    _gui-text="Font size"
-	    _gui-description="In document units">1.000</param>
+	    _gui-description="Size in document units">1.000</param>
+
+  
+  <param name="customContent" type="string"
+	    _gui-text="Custom contents:"
+	    _gui-description="Leave empty to calculate value from object"></param>
   
   <effect>
     <object-type>all</object-type>
