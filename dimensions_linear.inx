@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension
+    xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <_name>Linear</_name>
+  <id>fsmMLK.DimensionsLinear</id>
+  <dependency type="executable"
+		    location="extensions">dimensions_linear.py</dependency>
+  <dependency type="executable"
+		    location="extensions">inkscapeMadeEasy_Base.py</dependency>
+  <dependency type="executable"
+		    location="extensions">inkscapeMadeEasy_Draw.py</dependency>
+  <dependency type="executable"
+		    location="extensions">inkex.py</dependency>
+
+  <!-- Calculation -->
+  <param name="group"
+	    type="boolean"
+	    _gui-text="Use selected group over individual objects">False</param>
+  
+  <param name="direction" type="optiongroup"
+	    appearance="minimal" _gui-text="Direction:">
+    <_option value="horizontal">Horizontal</_option>
+    <_option value="vertical">Vertical</_option>
+    <_option value="auto">Auto Choose</_option>
+    <_option value="parallel">Diagonal</_option>
+  </param>
+
+  <!-- Marker -->
+  <param name="desc1" type="description"
+	    appearance="header">Dimension Marker</param>
+  <param name="markerStyle" type="optiongroup"
+	    appearance="minimal"
+	    _gui-text="Marker style:">
+    <_option value="arrow">Arrow</_option>
+    <_option value="circle">Circle</_option>
+    <_option value="serif">Serif</_option>
+  </param>
+  
+  <param name="smalDimStyle"
+	    type="boolean"
+	    _gui-text="Small dimension style"
+	    indent="1">False</param>
+
+  <param name="lineColor" type="optiongroup"
+	    appearance="minimal" _gui-text="Line color:">
+    <_option value="black">Black</_option>
+    <_option value="red">Red</_option>
+    <_option value="Lred">  Light Red</_option>
+    <_option value="Dred">  Dark Red</_option>
+    <_option value="blue">Blue</_option>
+    <_option value="Lblue">  Light Blue</_option>
+    <_option value="Dblue">  Dark Blue</_option>
+    <_option value="yellow">Yellow</_option>
+    <_option value="Lyellow">  Light Yellow</_option>
+    <_option value="Dyellow">  Dark Yellow</_option>
+    <_option value="green">Green</_option>
+    <_option value="Lgreen">  Light Green</_option>
+    <_option value="Dgreen">  Dark Green</_option>
+    <_option value="magen">Magenta</_option>
+    <_option value="Lmagen">  Light Magenta</_option>
+    <_option value="Dmagen">  Dark Magenta</_option>
+    <_option value="white">White</_option>
+  </param>
+  
+  <param name="lineWidthProp" type="float" min="0.1"    max="10"
+	    precision="1"  
+	    _gui-text="Line width multiplier">1.0</param>
+  <param name="arrowSizeProp" type="float" min="0.1"    max="10"
+	    precision="1"  
+	    _gui-text="Marker size multiplier">1.0</param>
+
+  
+  <!-- Text Location -->
+  <param name="desc" type="description"
+	    appearance="header">Dimension Location</param>
+  
+  <param name="side" type="optiongroup"
+	    appearance="minimal"
+	    _gui-text="Text Side:">
+    <_option value="upperLeft">Upper Left</_option>
+    <_option value="lowerRight">Lower Right</_option>
+  </param>
+
+  <param name="horizontalText"   type="boolean"
+	    _gui-text="Keep text horizontal"
+	    indent="1">True</param>
+
+  
+  <!-- Text -->
+  <param name="desc" type="description"
+	    appearance="header">Dimension Text</param>
+
+  <param name="customContent" type="string"
+	    _gui-text="Custom contents:"
+	    _gui-description="Leave empty to calculate from object"></param>
+
+  <param name="unit" type="optiongroup"
+	    appearance="minimal" _gui-text="Unit:">
+    <_option value="doc">(document units)</_option>
+    <_option value="mm">mm</_option>
+    <_option value="cm">cm</_option>
+    <_option value="m">m</_option>
+    <_option value="in">in</_option>
+    <_option value="ft">ft</_option>
+    <_option value="px">pixel</_option>
+  </param>
+  
+  <param name="precision" type="optiongroup" appearance="minimal"
+	    _gui-text="Precision:"
+	    _gui-description="Fractional options will convert decimals if Unit is in Inches">
+    <_option value="2">1/2</_option>
+    <_option value="4">1/4</_option>
+    <_option value="8">1/8</_option>
+    <_option value="16">1/16</_option>
+    <_option value="32">1/32</_option>
+    <_option value="p0">1</_option>
+    <_option value="p1">0.1</_option>
+    <_option value="p2">0.01</_option>
+    <_option value="p3">0.001</_option>
+    <_option value="p4">0.0001</_option>
+    <_option value="p5">0.00001</_option>
+  </param>
+
+  <param name="unitSymbol"      type="boolean"
+	    _gui-text="Add unit symbol"
+	    indent="1">True</param>
+  <param name="trimzero"    type="boolean"
+	    _gui-text="Trim trailing zeros"
+	    indent="1">True</param>
+  <param name="expandInches"      type="boolean"
+	    _gui-text="Expand inches into feet + inches"
+	    _gui-description="Only used if Unit is inches. Converts values such as 13in to 1ft 1in"
+	    indent="1">True</param>
+  
+  <param name="textColor" type="optiongroup"
+	    appearance="minimal" _gui-text="Text color:">
+    <_option value="black">Black</_option>
+    <_option value="red">Red</_option>
+    <_option value="Lred">  Light Red</_option>
+    <_option value="Dred">  Dark Red</_option>
+    <_option value="blue">Blue</_option>
+    <_option value="Lblue">  Light Blue</_option>
+    <_option value="Dblue">  Dark Blue</_option>
+    <_option value="yellow">Yellow</_option>
+    <_option value="Lyellow">  Light Yellow</_option>
+    <_option value="Dyellow">  Dark Yellow</_option>
+    <_option value="green">Green</_option>
+    <_option value="Lgreen">  Light Green</_option>
+    <_option value="Dgreen">  Dark Green</_option>
+    <_option value="magen">Magenta</_option>
+    <_option value="Lmagen">  Light Magenta</_option>
+    <_option value="Dmagen">  Dark Magenta</_option>
+    <_option value="white">White</_option>
+  </param>
+
+  <param name="fontSize"
+	    type="float" min="0.001"    max="50"
+	    precision="3"
+	    _gui-text="Font size"
+	    _gui-description="In document units">1.000</param>
+  
+  <effect>
+    <object-type>all</object-type>
+    <effects-menu>
+      <submenu _name="Dimensions"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command reldir="extensions"
+		   interpreter="python">dimensions_linear.py</command>
+  </script>
+</inkscape-extension>
+

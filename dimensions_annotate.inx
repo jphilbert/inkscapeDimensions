@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension
+    xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+  <_name>Annotation</_name>
+  <id>fsmMLK.DimensionsAnnotation</id>
+  <dependency type="executable"
+		    location="extensions">dimensions_annotate.py</dependency>
+  <dependency type="executable"
+		    location="extensions">inkscapeMadeEasy_Base.py</dependency>
+  <dependency type="executable"
+		    location="extensions">inkscapeMadeEasy_Draw.py</dependency>
+  <dependency type="executable"
+		    location="extensions">inkex.py</dependency>
+
+  
+  
+  <!-- Text -->
+  <param name="desc" type="description"
+	    appearance="header">Annotation Text</param>
+
+  <param name="customContent" type="string"
+	    _gui-text="Custom contents:"
+	    _gui-description="Leave empty to calculate from object"></param>
+  
+  <param name="textColor" type="optiongroup"
+	    appearance="minimal" _gui-text="Text color:">
+    <_option value="black">Black</_option>
+    <_option value="red">Red</_option>
+    <_option value="Lred">  Light Red</_option>
+    <_option value="Dred">  Dark Red</_option>
+    <_option value="blue">Blue</_option>
+    <_option value="Lblue">  Light Blue</_option>
+    <_option value="Dblue">  Dark Blue</_option>
+    <_option value="yellow">Yellow</_option>
+    <_option value="Lyellow">  Light Yellow</_option>
+    <_option value="Dyellow">  Dark Yellow</_option>
+    <_option value="green">Green</_option>
+    <_option value="Lgreen">  Light Green</_option>
+    <_option value="Dgreen">  Dark Green</_option>
+    <_option value="magen">Magenta</_option>
+    <_option value="Lmagen">  Light Magenta</_option>
+    <_option value="Dmagen">  Dark Magenta</_option>
+    <_option value="white">White</_option>
+  </param>
+
+  <param name="fontSize"
+	    type="float" min="0.001"    max="50"
+	    precision="3"
+	    _gui-text="Font size"
+	    _gui-description="In document units">1.000</param>
+
+  <!-- Marker -->
+  <param name="desc" type="description"
+	    appearance="header">Annotation Marker</param>
+
+  <param name="lineColor" type="optiongroup"
+	    appearance="minimal" _gui-text="Line color:">
+    <_option value="black">Black</_option>
+    <_option value="red">Red</_option>
+    <_option value="Lred">  Light Red</_option>
+    <_option value="Dred">  Dark Red</_option>
+    <_option value="blue">Blue</_option>
+    <_option value="Lblue">  Light sBlue</_option>
+    <_option value="Dblue">  Dark Blue</_option>
+    <_option value="yellow">Yellow</_option>
+    <_option value="Lyellow">  Light Yellow</_option>
+    <_option value="Dyellow">  Dark Yellow</_option>
+    <_option value="green">Green</_option>
+    <_option value="Lgreen">  Light Green</_option>
+    <_option value="Dgreen">  Dark Green</_option>
+    <_option value="magen">Magenta</_option>
+    <_option value="Lmagen">  Light Magenta</_option>
+    <_option value="Dmagen">  Dark Magenta</_option>
+    <_option value="white">White</_option>
+  </param>
+  
+  <param name="lineWidthProp" type="float" min="0.1"    max="10"
+	    precision="1"  
+	    _gui-text="Line width multiplier">1.0</param>
+  <param name="arrowSizeProp" type="float" min="0.1"    max="10"
+	    precision="1"  
+	    _gui-text="Marker size multiplier">1.0</param>
+
+  
+  <effect>
+    <object-type>all</object-type>
+    <effects-menu>
+      <submenu _name="Dimensions"/>
+    </effects-menu>
+  </effect>
+  <script>
+    <command reldir="extensions"
+		   interpreter="python">dimensions_annotate.py</command>
+  </script>
+</inkscape-extension>
+

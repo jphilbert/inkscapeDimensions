@@ -928,8 +928,6 @@ class Dimensions(inkBase.inkscapeMadeEasy):
         if horizontalText:
             textAngle = 0
 
-            self.displayMsg(str(value))
-            self.displayMsg(str(4 * self.fontSize))
             if smallDimension and value > 4 * self.fontSize: 
                 justif = 'cc'
 
