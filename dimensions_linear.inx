@@ -91,16 +91,11 @@
   <param name="desc" type="description"
 	    appearance="header">Dimension Text</param>
 
-  <param name="unit" type="optiongroup"
-	    appearance="minimal" _gui-text="Unit:">
-    <_option value="doc">(document units)</_option>
-    <_option value="mm">mm</_option>
-    <_option value="cm">cm</_option>
-    <_option value="m">m</_option>
-    <_option value="in">in</_option>
-    <_option value="ft">ft</_option>
-    <_option value="px">pixel</_option>
-  </param>
+  <param name="scale"
+	    type="float" min="0.001"    max="100"
+	    precision="3"
+	    _gui-text="Scale"
+	    _gui-description="Scale document units by">1.000</param>
   
   <param name="precision" type="optiongroup" appearance="minimal"
 	    _gui-text="Precision:"

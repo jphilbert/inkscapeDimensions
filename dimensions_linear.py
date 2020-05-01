@@ -31,9 +31,6 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
             "--smalDimStyle", action="store", type="inkbool",
             dest="smalDimStyle", default=False)
         self.OptionParser.add_option(
-            "--unit", action="store", type="string",
-            dest="unit", default='doc')
-        self.OptionParser.add_option(
             "--unitSymbol", action="store", type="inkbool",
             dest="unitSymbol", default=True)
 
@@ -68,6 +65,10 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
         self.OptionParser.add_option(
             "--arrowSizeProp", action="store", type="float", 
             dest="arrowSizeProp", default=1.0)
+
+        self.OptionParser.add_option(
+            "--scale", action="store", type="float", 
+            dest="scale", default=1.0)
         
         ########################################
         # Colors 
@@ -229,7 +230,8 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
         direction = self.options.direction
         label = 'Dim'
         customText = self.options.customContent
-        unit = self.options.unit
+        unit = self.documentUnit
+        unitScale = self.options.scale
         unitSymbol = self.options.unitSymbol
         precision = self.options.precision
         horizontalText = self.options.horizontalText
@@ -318,12 +320,13 @@ class DimensionsLinear(inkBase.inkscapeMadeEasy):
 
         # If custom text is empty, calculate dimension from points
         if valueStr is None or len(valueStr.strip()) == 0:
-            if unit == 'doc':
-                unit = self.documentUnit
+            # if unit == 'doc':
+            #     unit = self.documentUnit
                 
             value = np.linalg.norm(n_vector)                
             value = self.unit2unit(value, self.documentUnit, unit)
             value /= self.documentScale
+            value *= unitScale
             valueStr = value
             
             if unitSymbol and unit == 'in':
